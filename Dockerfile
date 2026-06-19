@@ -11,6 +11,7 @@ COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
 COPY packages/ui/package.json packages/ui/package.json
 COPY packages/mdx/package.json packages/mdx/package.json
 COPY packages/thumbnail/package.json packages/thumbnail/package.json
+COPY packages/auth/package.json packages/auth/package.json
 COPY apps/docs/package.json apps/docs/package.json
 COPY apps/blog/package.json apps/blog/package.json
 COPY apps/website/package.json apps/website/package.json
@@ -24,6 +25,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/packages/ui/node_modules ./packages/ui/node_modules
 COPY --from=deps /app/packages/mdx/node_modules ./packages/mdx/node_modules
 COPY --from=deps /app/packages/thumbnail/node_modules ./packages/thumbnail/node_modules
+COPY --from=deps /app/packages/auth/node_modules ./packages/auth/node_modules
 COPY --from=deps /app/apps/docs/node_modules ./apps/docs/node_modules
 COPY --from=deps /app/apps/blog/node_modules ./apps/blog/node_modules
 COPY --from=deps /app/apps/website/node_modules ./apps/website/node_modules
