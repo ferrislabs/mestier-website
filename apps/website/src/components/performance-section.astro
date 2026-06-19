@@ -1,0 +1,88 @@
+---
+import { Icon } from "@iconify/react";
+
+const stats = [
+  { value: "< 10 ms", labelKey: "perf.stat1", label: "Réponse API médiane" },
+  { value: "100 %", labelKey: "perf.stat2", label: "Requêtes vérifiées à la compilation" },
+  { value: "0", labelKey: "perf.stat3", label: "Dépendance propriétaire" },
+];
+
+const pillars = [
+  {
+    icon: "mdi:language-rust",
+    titleKey: "perf.rust.title",
+    descKey: "perf.rust.description",
+    title: "Rust, de bout en bout",
+    description: "Un backend Axum compilé, sans ramasse-miettes : latences basses et prévisibles même en charge.",
+  },
+  {
+    icon: "mdi:database-check-outline",
+    titleKey: "perf.sql.title",
+    descKey: "perf.sql.description",
+    title: "Requêtes sûres",
+    description: "SQLx vérifie chaque requête PostgreSQL à la compilation. Pas de surprise en production.",
+  },
+  {
+    icon: "mdi:server-network-outline",
+    titleKey: "perf.self.title",
+    descKey: "perf.self.description",
+    title: "Auto-hébergeable",
+    description: "Docker Compose et c'est parti. Hébergez Mestier où vous voulez, gardez la maîtrise de vos données.",
+  },
+];
+---
+
+<section id="performance" class="border-b">
+  <div class="mx-auto max-w-6xl px-5 py-20 sm:py-28">
+    <div class="max-w-2xl">
+      <p class="text-sm font-semibold uppercase tracking-wide text-primary" data-t="perf.label">
+        Performance & souveraineté
+      </p>
+      <h2
+        class="mt-3 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl"
+        data-t="perf.title"
+      >
+        Construit en Rust. Rapide par conception.
+      </h2>
+      <p class="mt-4 text-lg text-muted-foreground" data-t="perf.description">
+        Pas un n-ième SaaS lourd. Mestier est un logiciel libre, léger et taillé
+        pour durer — du code ouvert que vous pouvez auditer et héberger.
+      </p>
+    </div>
+
+    <!-- Ember illustration band -->
+    <div class="relative mt-12 overflow-hidden rounded-2xl surface-brand p-8 sm:p-10">
+      <div class="absolute inset-0 bg-pixel-grid opacity-60" aria-hidden="true"></div>
+      <div class="relative grid grid-cols-1 gap-6 sm:grid-cols-3">
+        {
+          stats.map((s) => (
+            <div class="rounded-xl bg-white/95 p-6 text-center shadow-lg">
+              <p class="text-4xl font-semibold tracking-tight text-foreground">{s.value}</p>
+              <p class="mt-2 text-sm text-muted-foreground" data-t={s.labelKey}>
+                {s.label}
+              </p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-3">
+      {
+        pillars.map((p) => (
+          <div class="rounded-xl border bg-card p-6">
+            <div class="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <Icon icon={p.icon} className="size-5" client:load />
+            </div>
+            <h3 class="mt-4 text-base font-semibold text-foreground" data-t={p.titleKey}>
+              {p.title}
+            </h3>
+            <p class="mt-2 text-sm leading-relaxed text-muted-foreground" data-t={p.descKey}>
+              {p.description}
+            </p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

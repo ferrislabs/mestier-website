@@ -1,0 +1,102 @@
+---
+import { Icon } from "@iconify/react";
+
+const modules = [
+  {
+    icon: "mdi:view-dashboard-outline",
+    titleKey: "platform.gestion.title",
+    descKey: "platform.gestion.description",
+    title: "Gestion",
+    description: "Devis, factures, clients, stock et rentabilité.",
+    available: true,
+  },
+  {
+    icon: "mdi:forum-outline",
+    titleKey: "platform.comms.title",
+    descKey: "platform.comms.description",
+    title: "Communication",
+    description: "Chat d'équipe façon Discord et visioconférence.",
+    available: false,
+  },
+  {
+    icon: "mdi:view-kanban-outline",
+    titleKey: "platform.projects.title",
+    descKey: "platform.projects.description",
+    title: "Projets",
+    description: "Planning, tâches et suivi de chantiers.",
+    available: false,
+  },
+  {
+    icon: "mdi:lifebuoy",
+    titleKey: "platform.support.title",
+    descKey: "platform.support.description",
+    title: "Support",
+    description: "Boîte de réception partagée et support e-mail.",
+    available: false,
+  },
+  {
+    icon: "mdi:account-group-outline",
+    titleKey: "platform.hr.title",
+    descKey: "platform.hr.description",
+    title: "Ressources humaines",
+    description: "Congés, paie, notes de frais et recrutement.",
+    available: false,
+  },
+];
+---
+
+<section id="platform" class="border-b">
+  <div class="mx-auto max-w-6xl px-5 py-20 sm:py-28">
+    <div class="max-w-2xl">
+      <p class="text-sm font-semibold uppercase tracking-wide text-primary" data-t="platform.label">
+        La plateforme
+      </p>
+      <h2
+        class="mt-3 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl"
+        data-t="platform.title"
+      >
+        Tous vos outils, connectés.
+      </h2>
+      <p class="mt-4 text-lg text-muted-foreground" data-t="platform.description">
+        Pas un énième logiciel de gestion : une suite connectée pour toute votre
+        entreprise. La gestion est là aujourd'hui ; communication, projets,
+        support et RH arrivent — le tout open-source et au même endroit.
+      </p>
+    </div>
+
+    <div class="mt-12 grid grid-cols-1 gap-px overflow-hidden border bg-border sm:grid-cols-2 lg:grid-cols-5">
+      {
+        modules.map((m) => (
+          <div class="flex flex-col bg-card p-6">
+            <div class="flex items-center justify-between">
+              <div class="flex size-11 items-center justify-center bg-primary/10 text-primary">
+                <Icon icon={m.icon} className="size-5" client:load />
+              </div>
+              {m.available ? (
+                <span
+                  class="bg-primary px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground"
+                  data-t="platform.available"
+                >
+                  Disponible
+                </span>
+              ) : (
+                <span
+                  class="border border-primary/30 bg-primary/5 px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary"
+                  data-t="platform.soon"
+                >
+                  Bientôt
+                </span>
+              )}
+            </div>
+            <h3 class="mt-5 text-base font-semibold text-foreground" data-t={m.titleKey}>
+              {m.title}
+            </h3>
+            <p class="mt-2 text-sm leading-relaxed text-muted-foreground" data-t={m.descKey}>
+              {m.description}
+            </p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

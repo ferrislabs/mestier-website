@@ -1,0 +1,99 @@
+---
+import { Icon } from "@iconify/react";
+import { Button } from "@explainer/ui";
+
+const docsUrl = import.meta.env.PUBLIC_DOCS_URL || "";
+---
+
+<section class="border-b">
+  <div class="mx-auto max-w-6xl px-5 py-20 sm:py-28">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div class="max-w-2xl">
+        <p
+          class="text-sm font-semibold uppercase tracking-wide text-primary"
+          data-t="showcase.label"
+        >
+          Du devis au paiement
+        </p>
+        <h2
+          class="mt-3 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl"
+          data-t="showcase.title"
+        >
+          Votre activité, pilotée en temps réel.
+        </h2>
+        <p class="mt-4 text-lg text-muted-foreground" data-t="showcase.description">
+          Chaque action met à jour vos indicateurs instantanément. Plus besoin
+          d'attendre la fin du mois pour savoir où vous en êtes.
+        </p>
+      </div>
+      <Button variant="outline" className="cursor-pointer" client:load>
+        <a
+          href={`${docsUrl}/fr/mestier/getting-started`}
+          class="flex items-center gap-2"
+          rel="noopener noreferrer"
+        >
+          <span data-t="showcase.action">Voir la doc</span>
+          <Icon icon="mdi:arrow-right" className="size-4" client:load />
+        </a>
+      </Button>
+    </div>
+
+    <!-- Brand showcase -->
+    <div class="relative mt-12 overflow-hidden surface-brand">
+      <div class="absolute inset-0 bg-pixel-grid opacity-60" aria-hidden="true"></div>
+
+      <div class="relative grid gap-10 p-8 sm:p-12 lg:grid-cols-2 lg:gap-16">
+        <div class="text-white">
+          <h3 class="text-2xl font-semibold" data-t="showcase.flow.title">
+            Un flux unique, sans ressaisie.
+          </h3>
+          <p class="mt-3 max-w-md text-white/85" data-t="showcase.flow.description">
+            Le devis devient facture, la facture met à jour le stock et la
+            trésorerie. Mestier orchestre chaque étape automatiquement.
+          </p>
+
+          <ul class="mt-7 space-y-3">
+            {[
+              { k: "showcase.point1", t: "Relances de paiement automatiques" },
+              { k: "showcase.point2", t: "Exports comptables et PDF conformes" },
+              { k: "showcase.point3", t: "Tableau de bord temps réel" },
+            ].map((p) => (
+              <li class="flex items-center gap-3 text-white/95">
+                <span class="flex size-5 items-center justify-center rounded-full bg-white/20">
+                  <Icon icon="mdi:check" className="size-3.5" client:load />
+                </span>
+                <span data-t={p.k}>{p.t}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Mini terminal / pipeline card -->
+        <div class="rounded-xl bg-white/95 p-5 shadow-2xl backdrop-blur">
+          <div class="flex items-center gap-2 border-b pb-3">
+            <span class="size-2.5 rounded-full bg-primary"></span>
+            <span class="text-sm font-medium text-foreground">Automatisations</span>
+          </div>
+          <div class="mt-4 space-y-3 text-sm">
+            {[
+              { icon: "mdi:email-fast-outline", t: "Envoyer le devis au client" },
+              { icon: "mdi:autorenew", t: "Convertir en facture à l'acceptation" },
+              { icon: "mdi:bell-ring-outline", t: "Relancer à J+15 si impayé" },
+              { icon: "mdi:chart-line", t: "Mettre à jour la marge du chantier" },
+            ].map((step, i) => (
+              <div class="flex items-center gap-3 rounded-lg border bg-background px-3 py-2.5">
+                <span class="flex size-7 items-center justify-center rounded-md bg-primary/10 text-primary">
+                  <Icon icon={step.icon} className="size-4" client:load />
+                </span>
+                <span class="flex-1 text-foreground">{step.t}</span>
+                <span class="text-[11px] font-semibold uppercase tracking-wider text-primary">
+                  {i === 0 ? "Actif" : "Auto"}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

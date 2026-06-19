@@ -1,0 +1,188 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@theme {
+  /* Mestier brand — deep teal/emerald on cool near-white */
+  --color-background: #f7f7f7;
+  --color-foreground: #1a1a1a;
+  --color-card: #ffffff;
+  --color-card-foreground: #1a1a1a;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #1a1a1a;
+  --color-primary: #0f3d36;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #e8f3f0;
+  --color-secondary-foreground: #0f3d36;
+  --color-muted: #f0f1f1;
+  --color-muted-foreground: #4f4f4f;
+  --color-accent: #e8f3f0;
+  --color-accent-foreground: #0f3d36;
+  --color-destructive: #e85757;
+  --color-destructive-foreground: #ffffff;
+  --color-border: #eaeaea;
+  --color-input: #eaeaea;
+  --color-ring: #3fa38a;
+
+  /* Brand scale + warm accent — used by gradients, the hero grid, charts */
+  --color-brand-900: #0f3d36;
+  --color-brand-700: #1f6f5e;
+  --color-brand-500: #3fa38a;
+  --color-brand-300: #8ad4c4;
+  --color-brand-soft: #e8f3f0;
+  --color-amber: #d9960d;
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+  }
+}
+
+hr {
+  border-color: var(--border-color);
+  opacity: 0.1;
+  border-top-width: 1px;
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+/* Inline code */
+.prose :not(pre) > code {
+  background-color: var(--color-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0.15em 0.4em;
+  font-size: 0.8125em;
+  font-weight: 500;
+}
+
+html:not(.dark)  .astro-code,
+html:not(.dark)  .astro-code span:not(.highlighted, .highlighted-word, .diff) * {
+  background-color: oklch(0.985 0 0) !important;
+}
+
+html.dark  .astro-code,
+html.dark  .astro-code * {
+  color: var(--shiki-dark) !important;
+}
+
+html.dark  .astro-code,
+html.dark  > .astro-code {
+  background-color: oklch(0.274 0.006 286.033) !important;
+}
+
+/* --- Mestier landing helpers --- */
+
+/* Faint blueprint grid, used as a subtle background on light sections */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--color-foreground) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--color-foreground) 6%, transparent) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* Pixel grid overlay used on brand-coloured blocks */
+.bg-pixel-grid {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+/* Deep teal/emerald gradient surface for showcase blocks */
+.surface-brand {
+  background:
+    radial-gradient(120% 120% at 0% 0%, #2a8a74 0%, transparent 55%),
+    linear-gradient(135deg, #1f6f5e 0%, #0f3d36 100%);
+}
+
+/* Hairline section divider */
+.rule-x {
+  background-image: linear-gradient(to right, transparent, var(--color-border), transparent);
+}
+
+/* Entrance animations (hero reveal) */
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes reveal-left {
+  from {
+    opacity: 0;
+    transform: translateX(-28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes reveal-right {
+  from {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes reveal-fade {
+  from {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.reveal,
+.reveal-left,
+.reveal-right,
+.reveal-fade {
+  opacity: 0;
+  animation-duration: 0.8s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  animation-fill-mode: both;
+}
+.reveal {
+  animation-name: reveal-up;
+}
+.reveal-left {
+  animation-name: reveal-left;
+}
+.reveal-right {
+  animation-name: reveal-right;
+}
+.reveal-fade {
+  animation-name: reveal-fade;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-left,
+  .reveal-right,
+  .reveal-fade {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

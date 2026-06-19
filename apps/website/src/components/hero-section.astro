@@ -1,0 +1,325 @@
+---
+import { Icon } from "@iconify/react";
+import { HeroGrid } from "./hero-grid";
+
+const docsUrl = import.meta.env.PUBLIC_DOCS_URL || "";
+
+const endIcons = ["mdi:file-document-outline", "mdi:account-group-outline", "mdi:chart-areaspline"];
+---
+
+<!-- Tall on desktop so the inner panel can pin and the scroll hand-off can play -->
+<section id="hero-scroll" class="relative border-b lg:h-[230vh]">
+  <div
+    id="hero-sticky"
+    class="relative overflow-hidden lg:sticky lg:top-15 lg:h-[calc(100vh-3.75rem)]"
+  >
+    <!-- Greyed right panel — widens to take over the hero as you scroll -->
+    <div
+      id="hero-grey"
+      class="pointer-events-none absolute inset-y-0 right-0 z-0 w-full bg-foreground/[0.035] lg:block"
+      style="transform: scaleX(0.37); transform-origin: right center; will-change: transform"
+      aria-hidden="true"
+    >
+    </div>
+
+    <div class="relative z-[1] grid h-full lg:grid-cols-[1.7fr_1fr]">
+      <!-- LEFT: title (slides left) + animated board (slides up) -->
+      <div class="flex flex-col">
+        <div
+          id="hero-title"
+          class="relative z-[1] flex flex-1 items-end px-5 pt-16 pb-10 sm:px-8 lg:pt-24"
+        >
+          <h1 class="text-5xl font-semibold tracking-tight text-foreground sm:text-7xl lg:text-8xl">
+            <span class="inline-block reveal-left" style="animation-delay: 0.05s" data-t="hero.title1">Votre entreprise,</span><br />
+            <span class="inline-block reveal-left" style="animation-delay: 0.18s" data-t="hero.title2">connectée.</span>
+          </h1>
+        </div>
+
+        <!-- Sliding-tile board — moves up-left on scroll; the divider is stuck to its right edge -->
+        <div id="hero-board" class="border-r border-border">
+          <div class="reveal-fade relative" style="animation-delay: 0.3s">
+            <HeroGrid client:visible />
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: content lowered -->
+      <div
+        id="hero-right"
+        class="relative z-[2] flex flex-col justify-between gap-10 px-5 py-10 sm:px-8 lg:pt-[16vh]"
+      >
+        <div>
+          <!-- The lead text moves down to the centre and grows to become the title -->
+          <div
+            id="hero-lead-wrap"
+            style="transform-origin: left center"
+          >
+            <p class="reveal-right max-w-md text-lg/8 text-foreground sm:text-xl/8" style="animation-delay: 0.35s" data-t="hero.description">
+              Gestion, communication, projets, support, RH — Mestier réunit tous
+              les outils de votre entreprise dans une plateforme open-source.
+            </p>
+          </div>
+        </div>
+
+        <!-- Featured news box -->
+        <div data-hero-out style="will-change: transform">
+          <div class="reveal-right" style="animation-delay: 0.7s">
+            <p class="mb-3 font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground" data-t="hero.news.label">
+              À la une
+            </p>
+            <a
+              href="https://github.com/ferrislabs/mestier/releases"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group flex items-center gap-3 rounded-lg border border-border bg-card p-3 transition-colors hover:bg-foreground/[0.03]"
+            >
+              <span class="flex size-11 shrink-0 items-center justify-center rounded-md surface-brand text-white">
+                <Icon icon="mdi:rocket-launch-outline" className="size-5" client:load />
+              </span>
+              <span class="min-w-0 flex-1">
+                <span class="block text-[11px] font-medium uppercase tracking-wider text-primary" data-t="hero.news.tag">
+                  Nouveauté
+                </span>
+                <span class="block truncate text-sm font-medium text-foreground" data-t="hero.news.title">
+                  Mestier arrive en version 1.0.
+                </span>
+              </span>
+              <Icon icon="mdi:chevron-right" className="size-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" client:load />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Icons that appear one-by-one above the final title (desktop only) -->
+    <div id="hero-endicons" class="pointer-events-none absolute z-10 hidden gap-3 lg:flex">
+      {
+        endIcons.map((icon) => (
+          <span
+            class="hero-endicon flex size-12 items-center justify-center rounded-xl border border-border bg-card text-primary shadow-sm"
+            style="opacity: 0"
+          >
+            <Icon icon={icon} className="size-6" client:load />
+          </span>
+        ))
+      }
+    </div>
+
+    <!-- A cell that slides in from the right to fill the right side once scrolled (desktop only) -->
+    <div
+      id="hero-endcell"
+      class="pointer-events-none absolute bottom-[12%] right-[3%] top-[12%] z-10 hidden w-[30%] lg:block"
+      style="transform: translateX(125%)"
+    >
+      <div class="relative h-full w-full overflow-hidden rounded-2xl surface-brand">
+        <div class="absolute inset-0 bg-pixel-grid opacity-60" aria-hidden="true"></div>
+        <div class="relative flex h-full flex-col justify-between p-6 text-white">
+          <Icon icon="mdi:cube-outline" className="size-7" client:load />
+          <div>
+            <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-white/70">Open source · Rust</p>
+            <p class="mt-1 text-xl font-semibold leading-snug">Conçu pour durer, fait pour les artisans.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action buttons that arrive from the left, settling under the title (desktop only) -->
+    <div
+      id="hero-endbuttons"
+      class="pointer-events-none absolute z-10 hidden flex-wrap gap-3 lg:flex"
+      style="transform: translateX(-120%)"
+    >
+      <a
+        href={`${docsUrl}/fr/mestier/getting-started`}
+        rel="noopener noreferrer"
+        class="pointer-events-auto inline-flex items-center gap-2 rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+      >
+        <span data-t="hero.primaryAction">Démarrer gratuitement</span>
+        <Icon icon="mdi:chevron-right" className="size-4.5" client:load />
+      </a>
+      <a
+        href="https://github.com/ferrislabs/mestier"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="pointer-events-auto inline-flex items-center gap-2 rounded-md border border-border bg-background px-5 py-3 text-sm font-medium text-foreground transition-colors hover:bg-foreground/[0.04]"
+      >
+        <Icon icon="mdi:github" className="size-4.5" client:load />
+        <span data-t="hero.secondaryAction">Voir sur GitHub</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  @media (prefers-reduced-motion: reduce) and (min-width: 1024px) {
+    #hero-scroll {
+      height: auto;
+    }
+    #hero-sticky {
+      position: static;
+      height: auto;
+    }
+    #hero-endicons,
+    #hero-endcell,
+    #hero-endbuttons {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  function initHeroScroll() {
+    const section = document.getElementById("hero-scroll");
+    const sticky = document.getElementById("hero-sticky");
+    const title = document.getElementById("hero-title");
+    const board = document.getElementById("hero-board");
+    const grey = document.getElementById("hero-grey");
+    const right = document.getElementById("hero-right");
+    const wrap = document.getElementById("hero-lead-wrap");
+    const endicons = document.getElementById("hero-endicons");
+    const endcell = document.getElementById("hero-endcell");
+    const endbtns = document.getElementById("hero-endbuttons");
+    if (!section || !sticky || !title || !board || !grey || !right || !wrap) return;
+    const outs = Array.from(section.querySelectorAll<HTMLElement>("[data-hero-out]"));
+    const ups = Array.from(section.querySelectorAll<HTMLElement>("[data-hero-up]"));
+    const icons = endicons ? Array.from(endicons.children) as HTMLElement[] : [];
+
+    const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const GROW = 0.9; // final scale = 1 + GROW
+
+    let dx = 0;
+    let dy = 0;
+    let grey0 = 0.37; // initial horizontal scale of the grey panel (≈ right column width)
+    let boardShift = 800; // px the board travels upward
+    let titleShift = 600; // px the title travels upward
+    let panelH = 800; // sticky panel height
+    let ticking = false;
+
+    // Accumulate offsets up to the sticky panel (works regardless of which
+    // ancestors are positioned). offset* ignores transforms, so it's stable.
+    function offsetWithinSticky(el: HTMLElement) {
+      let x = 0;
+      let y = 0;
+      let n: HTMLElement | null = el;
+      while (n && n !== sticky) {
+        x += n.offsetLeft;
+        y += n.offsetTop;
+        n = n.offsetParent as HTMLElement | null;
+      }
+      return { x, y };
+    }
+
+    function measure() {
+      const W = sticky!.clientWidth;
+      const H = sticky!.clientHeight;
+      const targetLeft = Math.round(W * 0.03) + 12;
+      const o = offsetWithinSticky(wrap!);
+      dx = targetLeft - o.x;
+      dy = H * 0.5 - (o.y + wrap!.offsetHeight / 2);
+      grey0 = right!.offsetWidth / W;
+      panelH = H;
+      boardShift = H + board!.offsetHeight; // move fully past the top edge
+      titleShift = title!.offsetTop + title!.offsetHeight + 24; // move fully past the top edge
+
+      const titleHalf = (wrap!.offsetHeight * (1 + GROW)) / 2;
+      // Place the icon row just above where the title comes to rest.
+      if (endicons) {
+        endicons.style.left = `${targetLeft}px`;
+        endicons.style.top = `${Math.max(24, H * 0.5 - titleHalf - 64)}px`;
+      }
+      // Place the action buttons just below the title.
+      if (endbtns) {
+        endbtns.style.left = `${targetLeft}px`;
+        endbtns.style.top = `${H * 0.5 + titleHalf + 28}px`;
+      }
+    }
+
+    function reset() {
+      title!.style.transform = "";
+      board!.style.transform = "";
+      grey!.style.transform = `scaleX(${grey0})`;
+      wrap!.style.transform = "";
+      wrap!.style.filter = "";
+      for (const el of outs) el.style.transform = "";
+      for (const el of ups) el.style.transform = "";
+      for (const ic of icons) ic.style.opacity = "0";
+      if (endcell) endcell.style.transform = "translateX(125%)";
+      if (endbtns) endbtns.style.transform = "translateX(-120%)";
+    }
+
+    function update() {
+      ticking = false;
+      const desktop = window.matchMedia("(min-width: 1024px)").matches;
+      if (!desktop || reduce.matches) {
+        reset();
+        return;
+      }
+      const range = window.innerHeight * 0.9;
+      const p = clamp(-section!.getBoundingClientRect().top / range, 0, 1);
+
+      // Title moves straight up and out of the top, quickly (done by p≈0.35).
+      const tp = clamp(p / 0.35, 0, 1);
+      title!.style.transform = tp === 0 ? "" : `translate(0, ${-tp * titleShift}px)`;
+      // The trust line rises up together with the title.
+      for (const el of ups) el.style.transform = `translate3d(0, ${-tp * panelH}px, 0)`;
+
+      // The animated board moves up AND to the left (diagonal exit).
+      // 2D translate (not translate3d) so its labels stay crisp when at rest.
+      board!.style.transform = p === 0 ? "" : `translate(${-p * 105}%, ${-p * boardShift}px)`;
+      // The grey panel's left edge stays glued to the board's right edge as it slides left.
+      const greyScale = clamp(1 - (1 - grey0) * (1 - 1.05 * p), grey0, 1);
+      grey!.style.transform = `scaleX(${greyScale})`;
+
+      // Lead text follows the same rhythm as the grey panel (linear with scroll).
+      wrap!.style.transform = `translate(${dx * p}px, ${dy * p}px) scale(${1 + p * GROW})`;
+
+      // Featured box slides out to the right.
+      for (const el of outs) el.style.transform = `translate3d(${p * 130}%, 0, 0)`;
+
+      // The end cell slides in from the right during the second half.
+      if (endcell) {
+        const ep = clamp((p - 0.45) / 0.55, 0, 1);
+        endcell.style.transform = `translateX(${(1 - ep) * 125}%)`;
+      }
+
+      // The action buttons arrive from the left, only once the title has settled.
+      if (endbtns) {
+        const bp = clamp((p - 0.82) / 0.18, 0, 1);
+        endbtns.style.transform = `translateX(${(1 - bp) * -120}%)`;
+      }
+
+      // Icons appear one-by-one above the title as it settles.
+      for (let i = 0; i < icons.length; i++) {
+        const t0 = 0.72 + i * 0.07;
+        const ip = clamp((p - t0) / 0.09, 0, 1);
+        icons[i].style.opacity = `${ip}`;
+        icons[i].style.transform = `translateY(${(1 - ip) * 14}px)`;
+      }
+    }
+
+    function onScroll() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    }
+
+    measure();
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", () => {
+      measure();
+      update();
+    });
+    // Re-measure once entrance animations have settled (layout can shift slightly).
+    window.setTimeout(() => {
+      measure();
+      update();
+    }, 1700);
+    reduce.addEventListener?.("change", update);
+  }
+
+  initHeroScroll();
+  document.addEventListener("astro:after-swap", initHeroScroll);
+</script>

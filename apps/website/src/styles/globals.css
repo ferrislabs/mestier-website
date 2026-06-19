@@ -1,0 +1,11 @@
+@import '@explainer/ui/styles/globals.css';
+
+@source "../../../../packages/ui/src";
+
+/* Mistral-style: sharp corners across the whole landing — no rounding anywhere.
+   (The logo is an inline SVG shape, so it keeps its own rounded badge.) */
+*,
+*::before,
+*::after {
+  border-radius: 0 !important;
+}

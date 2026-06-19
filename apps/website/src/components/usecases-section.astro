@@ -1,0 +1,81 @@
+---
+import { Icon } from "@iconify/react";
+
+const cases = [
+  {
+    tagKey: "usecases.1.tag",
+    tag: "Menuiserie",
+    icon: "mdi:saw-blade",
+    titleKey: "usecases.1.title",
+    title: "Du métré au chantier livré, sans ressaisie.",
+    gradient: "from-[#1f6f5e] to-[#0f3d36]",
+  },
+  {
+    tagKey: "usecases.2.tag",
+    tag: "Plomberie & chauffage",
+    icon: "mdi:pipe-wrench",
+    titleKey: "usecases.2.title",
+    title: "Interventions, pièces et factures au même endroit.",
+    gradient: "from-[#3fa38a] to-[#1f6f5e]",
+  },
+  {
+    tagKey: "usecases.3.tag",
+    tag: "Fabrication & atelier",
+    icon: "mdi:hammer-screwdriver",
+    titleKey: "usecases.3.title",
+    title: "La marge réelle de chaque commande, en direct.",
+    gradient: "from-[#0f3d36] via-[#1f6f5e] to-[#d9960d]",
+  },
+];
+---
+
+<section id="usecases" class="border-b">
+  <div class="mx-auto max-w-6xl px-5 py-20 sm:py-28">
+    <div class="text-center">
+      <p class="text-sm font-semibold uppercase tracking-wide text-primary" data-t="usecases.label">
+        Pensé pour le terrain
+      </p>
+      <h2
+        class="mx-auto mt-3 max-w-2xl text-4xl font-semibold tracking-tight text-foreground sm:text-5xl"
+        data-t="usecases.title"
+      >
+        Un outil pour chaque métier.
+      </h2>
+      <p class="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground" data-t="usecases.description">
+        Mestier s'adapte à votre façon de travailler, pas l'inverse.
+      </p>
+    </div>
+
+    <div class="mt-12 grid grid-cols-1 gap-5 md:grid-cols-3">
+      {
+        cases.map((c) => (
+          <article class="group relative flex aspect-4/5 flex-col justify-between overflow-hidden rounded-2xl border p-6 text-white">
+            <div class:list={["absolute inset-0 -z-10 bg-gradient-to-br", c.gradient]} />
+            <div class="absolute inset-0 -z-10 bg-pixel-grid opacity-40" aria-hidden="true" />
+            <div class="flex items-center justify-between">
+              <span class="inline-flex items-center gap-2 rounded-full bg-black/20 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider backdrop-blur" data-t={c.tagKey}>
+                {c.tag}
+              </span>
+              <span class="flex size-9 items-center justify-center rounded-lg bg-white/15 backdrop-blur">
+                <Icon icon={c.icon} className="size-5" client:load />
+              </span>
+            </div>
+            <div>
+              <h3 class="text-xl font-semibold leading-snug" data-t={c.titleKey}>
+                {c.title}
+              </h3>
+              <span class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-white/90">
+                <span data-t="usecases.cta">Découvrir</span>
+                <Icon
+                  icon="mdi:arrow-right"
+                  className="size-4 transition-transform group-hover:translate-x-1"
+                  client:load
+                />
+              </span>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

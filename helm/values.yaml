@@ -1,0 +1,84 @@
+# Default values for mestier-website.
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/ferrislabs/mestier-website
+  pullPolicy: IfNotPresent
+# Image tag. Kept as a top-level key so CI can bump it via `sed s/^imageTag:.*/`.
+imageTag: latest
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+# Port the nginx container listens on (see nginx.conf).
+containerPort: 8080
+
+serviceAccount:
+  create: false
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+securityContext: {}
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 101
+
+service:
+  type: ClusterIP
+  port: 80
+
+# Gateway API HTTPRoute (replaces Ingress).
+httpRoute:
+  enabled: true
+  annotations: {}
+  # References to the Gateway(s) this route attaches to.
+  parentRefs:
+    - name: gateway
+      namespace: gateway
+      # sectionName: https
+  hostnames:
+    - mestier.fr
+  # Each rule routes to this chart's Service. Override matches/filters as needed.
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+volumes: []
+volumeMounts: []
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

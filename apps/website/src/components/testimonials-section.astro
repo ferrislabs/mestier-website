@@ -1,0 +1,183 @@
+---
+const testimonials = [
+  {
+    name: "Julien Laurent",
+    role: "Menuiserie Laurent",
+    bodyKey: "testimonials.1.body",
+    body: "On a remplacé trois tableurs et un logiciel de facturation par Mestier. Les devis partent le soir même.",
+    img: "https://i.pravatar.cc/150?u=julien",
+  },
+  {
+    name: "Sophie Dubois",
+    role: "Atelier Dubois",
+    bodyKey: "testimonials.2.body",
+    body: "Enfin un outil qui calcule ma marge réelle par chantier. Je sais quels clients sont rentables.",
+    img: "https://i.pravatar.cc/150?u=sophie",
+  },
+  {
+    name: "Karim Benali",
+    role: "Toiture Pro",
+    bodyKey: "testimonials.3.body",
+    body: "Les relances de paiement automatiques m'ont fait gagner des semaines de trésorerie.",
+    img: "https://i.pravatar.cc/150?u=karim",
+  },
+  {
+    name: "Marie Fontaine",
+    role: "Plomberie Fontaine",
+    bodyKey: "testimonials.4.body",
+    body: "Rapide, même avec des milliers de lignes. On sent que c'est du solide derrière.",
+    img: "https://i.pravatar.cc/150?u=marie",
+  },
+  {
+    name: "Thomas Girard",
+    role: "Électricité Girard",
+    bodyKey: "testimonials.5.body",
+    body: "Open source et auto-hébergé : mes données restent chez moi, et je peux l'adapter à mon métier.",
+    img: "https://i.pravatar.cc/150?u=thomas",
+  },
+  {
+    name: "Inès Moreau",
+    role: "Agencement Moreau",
+    bodyKey: "testimonials.6.body",
+    body: "L'interface est claire, mon équipe l'a prise en main en une après-midi.",
+    img: "https://i.pravatar.cc/150?u=ines",
+  },
+  {
+    name: "Paul Mercier",
+    role: "Mercier & Fils",
+    bodyKey: "testimonials.7.body",
+    body: "Du devis à la facture payée, tout est relié. On ne ressaisit plus rien.",
+    img: "https://i.pravatar.cc/150?u=paul",
+  },
+  {
+    name: "Léa Petit",
+    role: "Petit Rénovation",
+    bodyKey: "testimonials.8.body",
+    body: "Le suivi de stock évite les ruptures sur les chantiers. Un vrai gain de temps.",
+    img: "https://i.pravatar.cc/150?u=lea",
+  },
+];
+
+const firstRow = testimonials.slice(0, Math.ceil(testimonials.length / 2));
+const secondRow = testimonials.slice(Math.ceil(testimonials.length / 2));
+---
+
+<section class="border-b">
+  <div class="w-full max-w-[90rem] mx-auto px-5 py-20 sm:py-28">
+    <div class="text-center mb-14">
+      <p class="text-sm font-semibold uppercase tracking-wide text-primary" data-t="testimonials.label">
+        Ils l'utilisent au quotidien
+      </p>
+      <h2 class="mt-3 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl" data-t="testimonials.title">
+        Adopté par les artisans.
+      </h2>
+      <p
+        class="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto text-balance"
+        data-t="testimonials.description"
+      >
+        Ce que les ateliers et PME disent de Mestier.
+      </p>
+    </div>
+
+    <div class="relative overflow-hidden">
+      <!-- Row 1 -->
+      <div class="flex gap-4 mb-4 testimonial-marquee">
+        {
+          [...firstRow, ...firstRow, ...firstRow, ...firstRow].map((item) => (
+            <figure class="flex-shrink-0 w-80 rounded-xl border bg-card p-5 cursor-default">
+              <div class="flex items-center gap-3">
+                <img
+                  class="size-9 rounded-full object-cover"
+                  width="36"
+                  height="36"
+                  alt={item.name}
+                  src={item.img}
+                  loading="lazy"
+                />
+                <div>
+                  <figcaption class="text-sm font-medium text-foreground">
+                    {item.name}
+                  </figcaption>
+                  <p class="text-xs text-muted-foreground">{item.role}</p>
+                </div>
+              </div>
+              <blockquote class="mt-3 text-sm text-muted-foreground leading-relaxed" data-t={item.bodyKey}>
+                {item.body}
+              </blockquote>
+            </figure>
+          ))
+        }
+      </div>
+
+      <!-- Row 2 (reversed) -->
+      <div class="flex gap-4 testimonial-marquee-reverse">
+        {
+          [...secondRow, ...secondRow, ...secondRow, ...secondRow].map((item) => (
+            <figure class="flex-shrink-0 w-80 rounded-xl border bg-card p-5 cursor-default">
+              <div class="flex items-center gap-3">
+                <img
+                  class="size-9 rounded-full object-cover"
+                  width="36"
+                  height="36"
+                  alt={item.name}
+                  src={item.img}
+                  loading="lazy"
+                />
+                <div>
+                  <figcaption class="text-sm font-medium text-foreground">
+                    {item.name}
+                  </figcaption>
+                  <p class="text-xs text-muted-foreground">{item.role}</p>
+                </div>
+              </div>
+              <blockquote class="mt-3 text-sm text-muted-foreground leading-relaxed" data-t={item.bodyKey}>
+                {item.body}
+              </blockquote>
+            </figure>
+          ))
+        }
+      </div>
+
+      <!-- Fade edges -->
+      <div
+        class="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-background"
+      >
+      </div>
+      <div
+        class="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-background"
+      >
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes testimonial-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @keyframes testimonial-scroll-reverse {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  .testimonial-marquee {
+    animation: testimonial-scroll 40s linear infinite;
+    width: max-content;
+  }
+  .testimonial-marquee-reverse {
+    animation: testimonial-scroll-reverse 40s linear infinite;
+    width: max-content;
+  }
+  .testimonial-marquee:hover,
+  .testimonial-marquee-reverse:hover {
+    animation-play-state: paused;
+  }
+</style>

@@ -1,0 +1,41 @@
+---
+import { Icon } from "@iconify/react";
+
+const docsUrl = import.meta.env.PUBLIC_DOCS_URL || "";
+---
+
+<section id="get-started" class="border-b">
+  <div class="mx-auto max-w-6xl px-5 py-20 sm:py-28">
+    <div class="relative overflow-hidden rounded-2xl surface-brand px-8 py-16 sm:px-16 sm:py-20">
+      <div class="absolute inset-0 bg-pixel-grid opacity-60" aria-hidden="true"></div>
+      <div class="relative max-w-2xl">
+        <h2 class="text-4xl font-semibold tracking-tight text-white sm:text-6xl" data-t="cta.title">
+          Reprenez la main sur votre gestion.
+        </h2>
+        <p class="mt-4 max-w-xl text-lg text-white/90" data-t="cta.description">
+          Installez Mestier en quelques minutes. Gratuit, open source, et
+          entièrement le vôtre.
+        </p>
+        <div class="mt-9 flex flex-wrap gap-3">
+          <a
+            href={`${docsUrl}/fr/mestier/getting-started`}
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-foreground transition-transform hover:-translate-y-0.5"
+          >
+            <span data-t="cta.action">Démarrer maintenant</span>
+            <Icon icon="mdi:arrow-right" className="size-4" client:load />
+          </a>
+          <a
+            href="https://github.com/ferrislabs/mestier"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 rounded-lg border border-white/40 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+          >
+            <Icon icon="mdi:github" className="size-4" client:load />
+            <span data-t="cta.secondary">Voir le code</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

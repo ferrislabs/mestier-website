@@ -1,0 +1,104 @@
+---
+import { Icon } from "@iconify/react";
+
+const features = [
+  {
+    icon: "mdi:account-group-outline",
+    titleKey: "features.crm.title",
+    descKey: "features.crm.description",
+    title: "CRM clients",
+    description:
+      "Centralisez contacts, chantiers et historique. Chaque échange, devis et facture rattaché au bon client.",
+  },
+  {
+    icon: "mdi:file-document-edit-outline",
+    titleKey: "features.quotes.title",
+    descKey: "features.quotes.description",
+    title: "Devis & factures",
+    description:
+      "Créez des devis en quelques clics, convertissez-les en factures, suivez les paiements et exportez en PDF conforme.",
+  },
+  {
+    icon: "mdi:package-variant-closed",
+    titleKey: "features.inventory.title",
+    descKey: "features.inventory.description",
+    title: "Stock & matériaux",
+    description:
+      "Suivez vos matières et fournitures en temps réel. Décompte automatique à chaque chantier.",
+  },
+  {
+    icon: "mdi:chart-areaspline",
+    titleKey: "features.profitability.title",
+    descKey: "features.profitability.description",
+    title: "Rentabilité",
+    description:
+      "Marge par chantier, par client, par mois. Les calculs sont faits côté serveur : une seule source de vérité.",
+  },
+  {
+    icon: "mdi:office-building-outline",
+    titleKey: "features.multiorg.title",
+    descKey: "features.multiorg.description",
+    title: "Multi-organisation",
+    description:
+      "Gérez plusieurs entités, équipes et rôles. Permissions fines pour chaque membre de l'atelier.",
+  },
+  {
+    icon: "mdi:shield-lock-outline",
+    titleKey: "features.auth.title",
+    descKey: "features.auth.description",
+    title: "Sécurité & SSO",
+    description:
+      "Authentification moderne (WebAuthn / FIDO2) via Ferriskey. Vos données restent chez vous.",
+  },
+];
+---
+
+<section id="features" class="relative border-b">
+  <div class="mx-auto max-w-6xl px-5 py-20 sm:py-28">
+    <div class="max-w-2xl">
+      <p
+        class="text-sm font-semibold uppercase tracking-wide text-primary"
+        data-t="features.label"
+      >
+        Une plateforme, tout votre métier
+      </p>
+      <h2
+        class="mt-3 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl"
+        data-t="features.title"
+      >
+        Tout gérer avec Mestier.
+      </h2>
+      <p
+        class="mt-4 text-lg text-muted-foreground"
+        data-t="features.description"
+      >
+        Fini les tableurs éparpillés et les logiciels qui ne se parlent pas.
+        Mestier réunit la gestion de votre activité dans une seule interface.
+      </p>
+    </div>
+
+    <div class="mt-12 grid grid-cols-1 gap-px overflow-hidden rounded-xl border bg-border sm:grid-cols-2 lg:grid-cols-3">
+      {
+        features.map((feature) => (
+          <div class="group bg-card p-7 transition-colors hover:bg-primary/[0.03]">
+            <div class="flex size-11 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+              <Icon icon={feature.icon} className="size-5" client:load />
+            </div>
+            <h3
+              class="mt-5 text-lg font-semibold text-foreground"
+              data-t={feature.titleKey}
+            >
+              {feature.title}
+            </h3>
+            <p
+              class="mt-2 text-sm leading-relaxed text-muted-foreground"
+              data-t={feature.descKey}
+            >
+              {feature.description}
+            </p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
