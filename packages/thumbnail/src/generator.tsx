@@ -22,7 +22,7 @@ export async function generateThumbnail(options: ThumbnailOptions): Promise<stri
   const primaryColor = resolveColor(options.primaryColor)
 
   return satori(
-    <div tw="w-full h-full flex flex-col justify-center bg-[#020420]">
+    <div tw="w-full h-full flex flex-col justify-center bg-[#0c1715]">
       <svg
         tw="absolute right-0 top-0"
         width="629"

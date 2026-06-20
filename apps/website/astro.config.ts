@@ -9,18 +9,21 @@ export default defineConfig({
     react(),
     thumbnailIntegration({
       appName: 'Mestier',
+      primaryColor: '#3fa38a',
       content: {
         type: 'static',
         pages: [
           {
             path: '/',
-            title: 'Mestier',
-            description: 'ERP & CRM open-source pour artisans et PME. Conçu en Rust.',
+            title: 'Votre entreprise, connectée.',
+            description:
+              'La suite open-source qui réunit gestion, communication, projets, support et RH. Pour startups, agences, PME et artisans.',
           },
           {
             path: '/thumbnails/en',
-            title: 'Mestier',
-            description: 'Open-source ERP & CRM for artisans and SMEs. Built in Rust.',
+            title: 'Your business, connected.',
+            description:
+              'The open-source suite that brings operations, communication, projects, support and HR together. For startups, agencies, SMEs and artisans.',
           },
         ],
       },

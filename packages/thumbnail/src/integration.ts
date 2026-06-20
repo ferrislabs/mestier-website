@@ -152,6 +152,7 @@ export function thumbnailIntegration(config: ThumbnailConfig): AstroIntegration 
           for (const page of config.content.pages) {
             try {
               const svg = await generateThumbnail({
+                headline: config.appName,
                 title: page.title,
                 description: page.description,
                 primaryColor: config.primaryColor,
@@ -215,6 +216,7 @@ function resolvePageMeta(
     const pagePath = url.replace(/\/thumbnail\.png$/, '') || '/'
     const page = config.content.pages.find((p) => p.path === pagePath)
     return {
+      headline: config.appName,
       title: page?.title ?? config.appName,
       description: page?.description,
     }
