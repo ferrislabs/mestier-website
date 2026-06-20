@@ -1,8 +1,10 @@
-import type { AppLink, NavbarLink } from '@explainer/ui'
-import { LocaleSwitcher, MobileMenu, MobileNavLinks, getAppLinks } from '@explainer/ui'
+import type { NavbarLink } from '@explainer/ui'
+import { LocaleSwitcher, MobileMenu, MobileNavLinks } from '@explainer/ui'
 import { Icon } from '@iconify/react'
 import { useEffect, useState } from 'react'
 import { useTranslations } from '../i18n/utils'
+
+const APP_URL = 'https://app.mestier.fr'
 
 function getClientLocale(): string {
   const match = document.cookie.match(/(?:^|; )locale=([^;]*)/)
@@ -20,20 +22,18 @@ interface WebsiteNavbarProps {
 export function WebsiteNavbar({ appUrlOverrides }: WebsiteNavbarProps) {
   const [locale, setLocale] = useState('fr')
   const t = useTranslations(locale)
-  const docsUrl = appUrlOverrides?.docs ?? ''
   const websiteUrl = appUrlOverrides?.website ?? '/'
 
   useEffect(() => {
     setLocale(getClientLocale())
   }, [])
 
-  // Section anchors + cross-app links rendered as the grid of nav cells.
+  // Section anchors rendered as the grid of nav cells.
   const sectionLinks: NavbarLink[] = [
     { label: t('nav.features'), href: '#features' },
     { label: t('nav.usecases'), href: '#usecases' },
     { label: t('nav.pricing'), href: '#pricing' },
   ]
-  const crossLinks: AppLink[] = getAppLinks('website', appUrlOverrides).filter((l) => l.id !== 'website')
 
   const cellLink =
     'flex items-center whitespace-nowrap border-r border-border px-5 text-[15px] font-medium text-foreground transition-colors hover:bg-foreground/[0.04]'
@@ -56,7 +56,7 @@ export function WebsiteNavbar({ appUrlOverrides }: WebsiteNavbarProps) {
               />
             }
           >
-            <MobileNavLinks links={sectionLinks} appLinks={getAppLinks('website', appUrlOverrides)} />
+            <MobileNavLinks links={sectionLinks} appLinks={[]} />
           </MobileMenu>
         </div>
 
@@ -74,11 +74,6 @@ export function WebsiteNavbar({ appUrlOverrides }: WebsiteNavbarProps) {
         <nav className="hidden items-stretch lg:flex">
           {sectionLinks.map((link) => (
             <a key={link.href} href={link.href} className={cellLink}>
-              {link.label}
-            </a>
-          ))}
-          {crossLinks.map((link) => (
-            <a key={link.id} href={link.href} className={cellLink}>
               {link.label}
             </a>
           ))}
@@ -110,9 +105,9 @@ export function WebsiteNavbar({ appUrlOverrides }: WebsiteNavbarProps) {
           GitHub
         </a>
 
-        {/* Primary action — full-height inverted cell (like "Contact sales") */}
+        {/* Primary action — opens the Mestier app */}
         <a
-          href={`${docsUrl}/fr/mestier/getting-started`}
+          href={APP_URL}
           rel="noopener noreferrer"
           className="flex items-center gap-2 whitespace-nowrap bg-primary px-5 text-[15px] font-medium text-primary-foreground transition-opacity hover:opacity-90 sm:px-6"
         >

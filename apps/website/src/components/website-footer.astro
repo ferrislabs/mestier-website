@@ -1,0 +1,112 @@
+---
+import { Icon } from "@iconify/react";
+
+const year = new Date().getFullYear();
+
+const columns = [
+  {
+    titleKey: "footer.col.product",
+    title: "Produit",
+    links: [
+      { key: "footer.link.platform", label: "La plateforme", href: "#platform" },
+      { key: "footer.link.features", label: "Fonctionnalités", href: "#features" },
+      { key: "footer.link.pricing", label: "Tarifs", href: "#pricing" },
+    ],
+  },
+  {
+    titleKey: "footer.col.resources",
+    title: "Ressources",
+    links: [
+      { key: "footer.link.github", label: "GitHub", href: "https://github.com/ferrislabs/mestier", external: true },
+      { key: "footer.link.changelog", label: "Nouveautés", href: "https://github.com/ferrislabs/mestier/releases", external: true },
+    ],
+  },
+  {
+    titleKey: "footer.col.community",
+    title: "Communauté",
+    links: [
+      { key: "footer.link.issues", label: "Signaler un bug", href: "https://github.com/ferrislabs/mestier/issues", external: true },
+      { key: "footer.link.discussions", label: "Discussions", href: "https://github.com/ferrislabs/mestier/discussions", external: true },
+      { key: "footer.link.contributing", label: "Contribuer", href: "https://github.com/ferrislabs/mestier/blob/main/CONTRIBUTING.md", external: true },
+    ],
+  },
+];
+---
+
+<footer class="relative overflow-hidden border-t border-border">
+  <div class="mx-auto max-w-6xl px-5">
+    <div class="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
+      <!-- Brand -->
+      <div>
+        <div class="flex items-center gap-2">
+          <img src="/logo.svg" alt="" class="size-6" />
+          <span class="text-lg font-semibold tracking-tight text-foreground">Mestier</span>
+        </div>
+        <p class="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground" data-t="footer.tagline">
+          L'entreprise, connectée. La suite open-source qui réunit tous vos outils
+          au même endroit.
+        </p>
+        <a
+          href="https://github.com/ferrislabs/mestier"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-5 inline-flex items-center gap-2 border border-border px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-foreground/[0.04]"
+        >
+          <Icon icon="mdi:github" className="size-4.5" client:load />
+          <span data-t="footer.starUs">Star sur GitHub</span>
+        </a>
+      </div>
+
+      <!-- Link columns -->
+      {
+        columns.map((col) => (
+          <div>
+            <h4 class="text-sm font-semibold text-foreground" data-t={col.titleKey}>
+              {col.title}
+            </h4>
+            <ul class="mt-4 space-y-2.5">
+              {col.links.map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    class="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                    {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  >
+                    <span data-t={link.key}>{link.label}</span>
+                    {link.external && <Icon icon="mdi:arrow-top-right" className="size-3.5 opacity-60" client:load />}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Oversized wordmark flourish -->
+    <div class="pointer-events-none -mb-2 select-none overflow-hidden" aria-hidden="true">
+      <span class="block whitespace-nowrap text-[18vw] font-semibold leading-[0.78] tracking-tighter text-foreground/[0.05] lg:text-[12rem]">
+        Mestier
+      </span>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="flex flex-col items-center justify-between gap-3 border-t border-border py-6 text-sm text-muted-foreground sm:flex-row">
+      <p>
+        © {year} Mestier · <span data-t="footer.license">Logiciel libre.</span>
+      </p>
+      <p class="flex items-center gap-1.5">
+        <span data-t="footer.builtBy">Construit par</span>
+        <a
+          href="https://github.com/ferrislabs"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-1 font-medium text-foreground transition-colors hover:text-primary"
+        >
+          Ferrislabs
+          <Icon icon="mdi:arrow-top-right" className="size-3.5 opacity-70" client:load />
+        </a>
+      </p>
+    </div>
+  </div>
+</footer>

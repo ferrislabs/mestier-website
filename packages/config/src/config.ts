@@ -2,7 +2,7 @@ import type { SiteConfig } from './contracts'
 
 export const defaultConfig: SiteConfig = {
   name: 'Mestier',
-  titleTemplate: '%s — Mestier',
+  titleTemplate: '%s · Mestier',
   favicon: '/favicon.svg',
   logo: '/logo.svg',
   thumbnail: '/thumbnail.png',
@@ -22,15 +22,14 @@ export const defaultConfig: SiteConfig = {
     copyright: 'footer.copyright',
     builtWith: 'footer.builtWith',
     links: {
+      // "Produit" — anchors to landing sections (docs/blog not deployed yet)
       documentation: [
-        { label: 'footer.links.gettingStarted', href: '/{locale}/mestier/getting-started' },
-        { label: 'footer.links.crm', href: '/{locale}/mestier/features/crm' },
-        { label: 'footer.links.invoicing', href: '/{locale}/mestier/features/invoicing' },
-        { label: 'footer.links.deployment', href: '/{locale}/mestier/deployment/docker' },
+        { label: 'footer.links.platform', href: '#platform' },
+        { label: 'footer.links.features', href: '#features' },
+        { label: 'footer.links.pricing', href: '#pricing' },
       ],
       resources: [
         { label: 'footer.links.github', href: 'https://github.com/ferrislabs/mestier', external: true },
-        { label: 'footer.links.blog', href: '', appId: 'blog' },
         { label: 'footer.links.changelog', href: 'https://github.com/ferrislabs/mestier/releases', external: true },
       ],
       community: [

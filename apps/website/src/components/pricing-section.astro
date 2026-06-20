@@ -1,7 +1,8 @@
 ---
 import { Icon } from "@iconify/react";
 
-const docsUrl = import.meta.env.PUBLIC_DOCS_URL || "";
+const APP_URL = "https://app.mestier.fr";
+const CONTACT_URL = "mailto:contact@mestier.fr";
 
 const selfHostFeatures = [
   { key: "pricing.selfhost.f1", label: "Toute la plateforme, sans limite" },
@@ -15,6 +16,13 @@ const cloudFeatures = [
   { key: "pricing.cloud.f2", label: "Hébergement géré pour vous" },
   { key: "pricing.cloud.f3", label: "Sauvegardes & mises à jour automatiques" },
   { key: "pricing.cloud.f4", label: "Support prioritaire" },
+];
+
+const dedicatedFeatures = [
+  { key: "pricing.dedicated.f1", label: "Toute la plateforme, sans limite" },
+  { key: "pricing.dedicated.f2", label: "Instance 100 % dédiée" },
+  { key: "pricing.dedicated.f3", label: "Sur notre cloud ou votre infra" },
+  { key: "pricing.dedicated.f4", label: "Support & accompagnement dédiés" },
 ];
 ---
 
@@ -31,12 +39,12 @@ const cloudFeatures = [
         Simple et transparent.
       </h2>
       <p class="mt-4 text-lg text-muted-foreground" data-t="pricing.description">
-        Auto-hébergez gratuitement, ou laissez-nous gérer l'hébergement. Toute la
-        plateforme dans les deux cas — sans options cachées.
+        Auto-hébergez gratuitement, passez au cloud géré, ou optez pour une
+        instance dédiée. Toute la plateforme, sans options cachées.
       </p>
     </div>
 
-    <div class="mx-auto mt-14 grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-2">
+    <div class="mx-auto mt-14 grid grid-cols-1 gap-6 lg:grid-cols-3">
       <!-- Self-hosted -->
       <div class="flex flex-col border border-border bg-card p-8">
         <h3 class="text-sm font-semibold uppercase tracking-wide text-muted-foreground" data-t="pricing.selfhost.name">
@@ -104,12 +112,46 @@ const cloudFeatures = [
         </ul>
 
         <a
-          href={`${docsUrl}/fr/mestier/getting-started`}
+          href={APP_URL}
           rel="noopener noreferrer"
           class="mt-8 inline-flex items-center justify-center gap-2 bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
         >
           <span data-t="pricing.cloud.cta">Démarrer</span>
           <Icon icon="mdi:arrow-right" className="size-4.5" client:load />
+        </a>
+      </div>
+
+      <!-- Dedicated -->
+      <div class="flex flex-col border border-border bg-card p-8">
+        <h3 class="text-sm font-semibold uppercase tracking-wide text-muted-foreground" data-t="pricing.dedicated.name">
+          Dédié
+        </h3>
+        <div class="mt-4 flex items-baseline gap-2">
+          <span class="text-5xl font-semibold tracking-tight text-foreground" data-t="pricing.dedicated.price">
+            Sur devis
+          </span>
+        </div>
+        <p class="mt-3 text-sm text-muted-foreground" data-t="pricing.dedicated.desc">
+          Une instance Mestier rien qu'à vous, sur notre cloud ou votre infra.
+        </p>
+
+        <ul class="mt-7 flex-1 space-y-3">
+          {
+            dedicatedFeatures.map((f) => (
+              <li class="flex items-start gap-2.5 text-sm text-foreground">
+                <Icon icon="mdi:check" className="mt-0.5 size-4 shrink-0 text-primary" client:load />
+                <span data-t={f.key}>{f.label}</span>
+              </li>
+            ))
+          }
+        </ul>
+
+        <a
+          href={CONTACT_URL}
+          class="mt-8 inline-flex items-center justify-center gap-2 border border-border px-5 py-3 text-sm font-medium text-foreground transition-colors hover:bg-foreground/[0.04]"
+        >
+          <Icon icon="mdi:email-outline" className="size-4.5" client:load />
+          <span data-t="pricing.dedicated.cta">Nous contacter</span>
         </a>
       </div>
     </div>

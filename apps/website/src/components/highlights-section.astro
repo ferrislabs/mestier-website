@@ -2,7 +2,7 @@
 import { Icon } from "@iconify/react";
 import { Button } from "@explainer/ui";
 
-const docsUrl = import.meta.env.PUBLIC_DOCS_URL || "";
+const APP_URL = "https://app.mestier.fr";
 ---
 
 <section class="border-b">
@@ -28,11 +28,11 @@ const docsUrl = import.meta.env.PUBLIC_DOCS_URL || "";
       </div>
       <Button variant="outline" className="cursor-pointer" client:load>
         <a
-          href={`${docsUrl}/fr/mestier/getting-started`}
+          href={APP_URL}
           class="flex items-center gap-2"
           rel="noopener noreferrer"
         >
-          <span data-t="showcase.action">Voir la doc</span>
+          <span data-t="showcase.action">Démarrer</span>
           <Icon icon="mdi:arrow-right" className="size-4" client:load />
         </a>
       </Button>

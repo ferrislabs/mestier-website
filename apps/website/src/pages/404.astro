@@ -1,17 +1,14 @@
 ---
 import Base from '../layouts/base.astro'
 import { WebsiteNavbar } from '../components/website-navbar'
-import { Footer } from '@explainer/ui'
-import { siteConfig } from '../config'
+import WebsiteFooter from '../components/website-footer.astro'
 
 const appUrlOverrides = {
   website: import.meta.env.PUBLIC_WEBSITE_URL,
-  docs: import.meta.env.PUBLIC_DOCS_URL,
-  blog: import.meta.env.PUBLIC_BLOG_URL,
 }
 ---
 
-<Base title="404 — Page introuvable">
+<Base title="404 · Page introuvable">
   <WebsiteNavbar appUrlOverrides={appUrlOverrides} client:load transition:persist />
 
   <main class="flex-1 flex flex-col items-center justify-center px-6 text-center">
@@ -28,7 +25,5 @@ const appUrlOverrides = {
     </a>
   </main>
 
-  <div class="mx-auto max-w-6xl px-6 w-full">
-    <Footer config={siteConfig} appUrlOverrides={appUrlOverrides} client:load />
-  </div>
+  <WebsiteFooter />
 </Base>

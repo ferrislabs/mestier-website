@@ -13,14 +13,12 @@ import PricingSection from '../components/pricing-section.astro'
 import TestimonialsSection from '../components/testimonials-section.astro'
 import FoundersSection from '../components/founders-section.astro'
 import CtaSection from '../components/cta-section.astro'
-import { Footer } from '@explainer/ui'
-import { siteConfig } from '../config'
+import WebsiteFooter from '../components/website-footer.astro'
 import { ui } from '../i18n/ui'
 
+// docs & blog are not deployed yet — only expose the website URL.
 const appUrlOverrides = {
   website: import.meta.env.PUBLIC_WEBSITE_URL,
-  docs: import.meta.env.PUBLIC_DOCS_URL,
-  blog: import.meta.env.PUBLIC_BLOG_URL,
 }
 
 // Base markup is authored in French; this map drives the English swap.
@@ -29,8 +27,8 @@ const thumbnails = { fr: '/thumbnail.png', en: '/thumbnails/en/thumbnail.png' }
 ---
 
 <Base
-  title="Mestier — ERP & CRM open-source pour artisans et PME"
-  description="Devis, factures, clients et stock dans un ERP open-source conçu en Rust. Rapide, fiable et auto-hébergeable."
+  title="Mestier · La plateforme open-source pour votre entreprise"
+  description="La suite open-source qui réunit gestion, communication, projets, support et RH pour les artisans et les PME. Conçue en Rust, rapide et auto-hébergeable."
   thumbnail="/thumbnail.png"
 >
   <WebsiteNavbar appUrlOverrides={appUrlOverrides} client:load transition:persist />
@@ -48,9 +46,7 @@ const thumbnails = { fr: '/thumbnail.png', en: '/thumbnails/en/thumbnail.png' }
   <FoundersSection />
   <CtaSection />
 
-  <div class="mx-auto max-w-6xl px-6">
-    <Footer config={siteConfig} appUrlOverrides={appUrlOverrides} client:load />
-  </div>
+  <WebsiteFooter />
 </Base>
 
 <script is:inline define:vars={{ translations, thumbnails }}>

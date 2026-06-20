@@ -2,7 +2,7 @@
 import { Icon } from "@iconify/react";
 import { HeroGrid } from "./hero-grid";
 
-const docsUrl = import.meta.env.PUBLIC_DOCS_URL || "";
+const APP_URL = "https://app.mestier.fr";
 
 const endIcons = ["mdi:file-document-outline", "mdi:account-group-outline", "mdi:chart-areaspline"];
 ---
@@ -13,16 +13,16 @@ const endIcons = ["mdi:file-document-outline", "mdi:account-group-outline", "mdi
     id="hero-sticky"
     class="relative overflow-hidden lg:sticky lg:top-15 lg:h-[calc(100vh-3.75rem)]"
   >
-    <!-- Greyed right panel — widens to take over the hero as you scroll -->
+    <!-- Greyed right panel: widens to take over the hero as you scroll -->
     <div
       id="hero-grey"
-      class="pointer-events-none absolute inset-y-0 right-0 z-0 w-full bg-foreground/[0.035] lg:block"
+      class="pointer-events-none absolute inset-y-0 right-0 z-0 hidden w-full bg-foreground/[0.035] lg:block"
       style="transform: scaleX(0.37); transform-origin: right center; will-change: transform"
       aria-hidden="true"
     >
     </div>
 
-    <div class="relative z-[1] grid h-full lg:grid-cols-[1.7fr_1fr]">
+    <div class="relative z-[1] grid h-full grid-cols-1 lg:grid-cols-[1.7fr_1fr]">
       <!-- LEFT: title (slides left) + animated board (slides up) -->
       <div class="flex flex-col">
         <div
@@ -35,7 +35,7 @@ const endIcons = ["mdi:file-document-outline", "mdi:account-group-outline", "mdi
           </h1>
         </div>
 
-        <!-- Sliding-tile board — moves up-left on scroll; the divider is stuck to its right edge -->
+        <!-- Sliding-tile board: moves up-left on scroll; the divider is stuck to its right edge -->
         <div id="hero-board" class="border-r border-border">
           <div class="reveal-fade relative" style="animation-delay: 0.3s">
             <HeroGrid client:visible />
@@ -55,9 +55,30 @@ const endIcons = ["mdi:file-document-outline", "mdi:account-group-outline", "mdi
             style="transform-origin: left center"
           >
             <p class="reveal-right max-w-md text-lg/8 text-foreground sm:text-xl/8" style="animation-delay: 0.35s" data-t="hero.description">
-              Gestion, communication, projets, support, RH — Mestier réunit tous
-              les outils de votre entreprise dans une plateforme open-source.
+              Mestier réunit gestion, communication, projets, support et RH dans
+              une seule plateforme open-source.
             </p>
+          </div>
+
+          <!-- Mobile CTAs (desktop uses the scroll hand-off buttons instead) -->
+          <div class="mt-7 flex flex-wrap gap-3 lg:hidden">
+            <a
+              href={APP_URL}
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+            >
+              <span data-t="hero.primaryAction">Démarrer gratuitement</span>
+              <Icon icon="mdi:chevron-right" className="size-4.5" client:load />
+            </a>
+            <a
+              href="https://github.com/ferrislabs/mestier"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 border border-border px-5 py-3 text-sm font-medium text-foreground transition-colors hover:bg-foreground/[0.04]"
+            >
+              <Icon icon="mdi:github" className="size-4.5" client:load />
+              <span data-t="hero.secondaryAction">Voir sur GitHub</span>
+            </a>
           </div>
         </div>
 
@@ -130,7 +151,7 @@ const endIcons = ["mdi:file-document-outline", "mdi:account-group-outline", "mdi
       style="transform: translateX(-120%)"
     >
       <a
-        href={`${docsUrl}/fr/mestier/getting-started`}
+        href={APP_URL}
         rel="noopener noreferrer"
         class="pointer-events-auto inline-flex items-center gap-2 rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
       >

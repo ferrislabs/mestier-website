@@ -1,4 +1,4 @@
-import { defaultConfig, resolveHref, t, type SiteConfig } from '@explainer/config'
+import { defaultConfig, t, type SiteConfig } from '@explainer/config'
 import { Icon } from '@iconify/react'
 import * as React from 'react'
 
@@ -29,7 +29,6 @@ export function Footer({ config = defaultConfig, locale: localeProp, appUrlOverr
     }
   }, [localeProp, config])
 
-  const docsUrl = (appUrlOverrides?.docs ?? '').replace(/\/$/, '')
   const blogUrl = appUrlOverrides?.blog ?? '/'
   const { footer, name } = config
 
@@ -54,7 +53,7 @@ export function Footer({ config = defaultConfig, locale: localeProp, appUrlOverr
           <ul className="space-y-2">
             {footer.links.documentation.map((link) => (
               <li key={link.href}>
-                <a href={`${docsUrl}${resolveHref(link.href, locale)}`} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <a href={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                   {t(locale, link.label)}
                 </a>
               </li>
