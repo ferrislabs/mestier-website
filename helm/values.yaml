@@ -6,7 +6,7 @@ image:
   repository: ghcr.io/ferrislabs/mestier-website
   pullPolicy: IfNotPresent
 # Image tag. Kept as a top-level key so CI can bump it via `sed s/^imageTag:.*/`.
-imageTag: sha-ea3cdf4
+imageTag: sha-9a85e4f
 
 imagePullSecrets: []
 nameOverride: ""
