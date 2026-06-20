@@ -40,8 +40,8 @@ httpRoute:
   annotations: {}
   # References to the Gateway(s) this route attaches to.
   parentRefs:
-    - name: gateway
-      namespace: gateway
+    - name: mestier-gateway
+      namespace: default
       # sectionName: https
   hostnames:
     - mestier.fr

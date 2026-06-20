@@ -31,7 +31,7 @@ export function WebsiteNavbar({ appUrlOverrides }: WebsiteNavbarProps) {
   const sectionLinks: NavbarLink[] = [
     { label: t('nav.features'), href: '#features' },
     { label: t('nav.usecases'), href: '#usecases' },
-    { label: t('nav.performance'), href: '#performance' },
+    { label: t('nav.pricing'), href: '#pricing' },
   ]
   const crossLinks: AppLink[] = getAppLinks('website', appUrlOverrides).filter((l) => l.id !== 'website')
 

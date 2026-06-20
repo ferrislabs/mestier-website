@@ -6,6 +6,7 @@ export const ui = {
     'nav.features': 'Fonctionnalités',
     'nav.usecases': 'Métiers',
     'nav.performance': 'Performance',
+    'nav.pricing': 'Tarifs',
     'nav.github': 'GitHub',
     'nav.getStarted': 'Démarrer',
 
@@ -138,6 +139,30 @@ export const ui = {
     'testimonials.8.body':
       "Le suivi de stock évite les ruptures sur les chantiers. Un vrai gain de temps.",
 
+    // Pricing
+    'pricing.label': 'Tarifs',
+    'pricing.title': 'Simple et transparent.',
+    'pricing.description':
+      "Auto-hébergez gratuitement, ou laissez-nous gérer l'hébergement. Toute la plateforme dans les deux cas — sans options cachées.",
+    'pricing.selfhost.name': 'Auto-hébergé',
+    'pricing.selfhost.price': 'Gratuit',
+    'pricing.selfhost.desc': 'Hébergez Mestier sur votre propre infrastructure, pour toujours.',
+    'pricing.selfhost.f1': 'Toute la plateforme, sans limite',
+    'pricing.selfhost.f2': 'Code source 100 % ouvert',
+    'pricing.selfhost.f3': 'Vos données, sur votre infrastructure',
+    'pricing.selfhost.f4': 'Support communautaire',
+    'pricing.selfhost.cta': 'Auto-héberger',
+    'pricing.cloud.name': 'Cloud',
+    'pricing.cloud.badge': 'Recommandé',
+    'pricing.cloud.unit': '/ utilisateur / mois',
+    'pricing.cloud.desc': "On héberge, sauvegarde et met à jour. Vous utilisez, c'est tout.",
+    'pricing.cloud.f1': 'Toute la plateforme, sans limite',
+    'pricing.cloud.f2': 'Hébergement géré pour vous',
+    'pricing.cloud.f3': 'Sauvegardes & mises à jour automatiques',
+    'pricing.cloud.f4': 'Support prioritaire',
+    'pricing.cloud.cta': 'Démarrer',
+    'pricing.note': 'Toute la plateforme incluse, tous les modules. Sans engagement.',
+
     // Founders
     'founders.label': "L'équipe",
     'founders.title': 'Les membres fondateurs.',
@@ -157,6 +182,7 @@ export const ui = {
     'nav.features': 'Features',
     'nav.usecases': 'Trades',
     'nav.performance': 'Performance',
+    'nav.pricing': 'Pricing',
     'nav.github': 'GitHub',
     'nav.getStarted': 'Get started',
 
@@ -288,6 +314,30 @@ export const ui = {
       'From quote to paid invoice, everything is connected. We never re-enter anything.',
     'testimonials.8.body':
       'Inventory tracking prevents shortages on site. A real time-saver.',
+
+    // Pricing
+    'pricing.label': 'Pricing',
+    'pricing.title': 'Simple and transparent.',
+    'pricing.description':
+      'Self-host it for free, or let us handle hosting. The full platform either way — no hidden options.',
+    'pricing.selfhost.name': 'Self-hosted',
+    'pricing.selfhost.price': 'Free',
+    'pricing.selfhost.desc': 'Host Mestier on your own infrastructure, forever.',
+    'pricing.selfhost.f1': 'The whole platform, no limits',
+    'pricing.selfhost.f2': '100% open source',
+    'pricing.selfhost.f3': 'Your data, on your infrastructure',
+    'pricing.selfhost.f4': 'Community support',
+    'pricing.selfhost.cta': 'Self-host',
+    'pricing.cloud.name': 'Cloud',
+    'pricing.cloud.badge': 'Recommended',
+    'pricing.cloud.unit': '/ user / month',
+    'pricing.cloud.desc': 'We host, back up and update it. You just use it.',
+    'pricing.cloud.f1': 'The whole platform, no limits',
+    'pricing.cloud.f2': 'Fully managed hosting',
+    'pricing.cloud.f3': 'Automatic backups & updates',
+    'pricing.cloud.f4': 'Priority support',
+    'pricing.cloud.cta': 'Get started',
+    'pricing.note': 'Whole platform included, every module. No commitment.',
 
     // Founders
     'founders.label': 'The team',
