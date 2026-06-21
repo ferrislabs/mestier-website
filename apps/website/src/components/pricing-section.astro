@@ -3,161 +3,633 @@ import { Icon } from "@iconify/react";
 
 const APP_URL = "https://app.mestier.fr";
 const CONTACT_URL = "mailto:contact@mestier.fr";
+const GITHUB_URL = "https://github.com/ferrislabs/mestier";
 
-const selfHostFeatures = [
-  { key: "pricing.selfhost.f1", label: "Toute la plateforme, sans limite" },
-  { key: "pricing.selfhost.f2", label: "Code source 100 % ouvert" },
-  { key: "pricing.selfhost.f3", label: "Vos données, sur votre infrastructure" },
-  { key: "pricing.selfhost.f4", label: "Support communautaire" },
+// Per-user reference cost of an equivalent stack (Slack + Axonaut + Lucca + Crisp).
+const STACK_COST = 160;
+
+interface Plan {
+  id: string;
+  nameKey: string;
+  name: string;
+  // price shown by the toggle (number span); free/custom plans use priceTextKey instead
+  monthly?: string;
+  annual?: string;
+  priceTextKey?: string;
+  priceText?: string;
+  unitKey?: string;
+  unit?: string;
+  descKey: string;
+  desc: string;
+  ctaKey: string;
+  cta: string;
+  href: string;
+  external?: boolean;
+  popular?: boolean;
+  features: { key: string; label: string }[];
+}
+
+const plans: Plan[] = [
+  {
+    id: "community",
+    nameKey: "pricing.community.name",
+    name: "Community",
+    priceTextKey: "pricing.community.price",
+    priceText: "Gratuit",
+    descKey: "pricing.community.desc",
+    desc: "Auto-hébergé, pour toujours.",
+    ctaKey: "pricing.community.cta",
+    cta: "Auto-héberger",
+    href: GITHUB_URL,
+    external: true,
+    features: [
+      { key: "pricing.f.selfhost", label: "Self-hébergé, illimité" },
+      { key: "pricing.f.oss", label: "Open source (Apache 2.0)" },
+      { key: "pricing.f.crmBasic", label: "CRM de base" },
+      { key: "pricing.f.collab", label: "Messagerie, visio E2EE, projets & docs" },
+      { key: "pricing.f.communitySupport", label: "Support communauté GitHub" },
+    ],
+  },
+  {
+    id: "starter",
+    nameKey: "pricing.starter.name",
+    name: "Starter",
+    monthly: "49 €",
+    annual: "39,20 €",
+    unitKey: "pricing.unit.month",
+    unit: "/ mois",
+    descKey: "pricing.starter.desc",
+    desc: "Idéal pour les TPE et artisans.",
+    ctaKey: "pricing.cta.start",
+    cta: "Démarrer",
+    href: APP_URL,
+    features: [
+      { key: "pricing.f.upTo10", label: "Jusqu'à 10 utilisateurs inclus" },
+      { key: "pricing.f.allCommunity", label: "Tout Community, plus :" },
+      { key: "pricing.f.cloudFr", label: "Hébergement cloud géré (France)" },
+      { key: "pricing.f.crmFull", label: "CRM complet + pipeline commercial" },
+      { key: "pricing.f.hrBasic", label: "RH de base (congés, notes de frais)" },
+      { key: "pricing.f.supportDesk", label: "Support client intégré" },
+      { key: "pricing.f.email48", label: "Support email sous 48 h" },
+    ],
+  },
+  {
+    id: "business",
+    nameKey: "pricing.business.name",
+    name: "Business",
+    monthly: "19 €",
+    annual: "15,20 €",
+    unitKey: "pricing.unit.userMonth",
+    unit: "/ utilisateur / mois",
+    descKey: "pricing.business.desc",
+    desc: "Pour les équipes qui grandissent.",
+    ctaKey: "pricing.cta.start",
+    cta: "Démarrer",
+    href: APP_URL,
+    popular: true,
+    features: [
+      { key: "pricing.f.allStarter", label: "Tout Starter, plus :" },
+      { key: "pricing.f.unlimited", label: "Utilisateurs illimités" },
+      { key: "pricing.f.hrAdvanced", label: "RH avancé (paie, onboarding, entretiens)" },
+      { key: "pricing.f.analytics", label: "Analytics & reporting avancés" },
+      { key: "pricing.f.api", label: "API & webhooks" },
+      { key: "pricing.f.sso", label: "SSO, rôles granulaires, audit logs" },
+      { key: "pricing.f.email24", label: "Support prioritaire sous 24 h" },
+    ],
+  },
+  {
+    id: "enterprise",
+    nameKey: "pricing.enterprise.name",
+    name: "Enterprise",
+    priceTextKey: "pricing.enterprise.price",
+    priceText: "Sur devis",
+    descKey: "pricing.enterprise.desc",
+    desc: "Pour les grandes organisations.",
+    ctaKey: "pricing.cta.contact",
+    cta: "Nous contacter",
+    href: CONTACT_URL,
+    features: [
+      { key: "pricing.f.allBusiness", label: "Tout Business, plus :" },
+      { key: "pricing.f.dedicated", label: "Instance dédiée / on-premise" },
+      { key: "pricing.f.sla", label: "SLA garanti" },
+      { key: "pricing.f.dedicatedSupport", label: "Support dédié, interlocuteur unique" },
+      { key: "pricing.f.onboarding", label: "Onboarding personnalisé" },
+      { key: "pricing.f.rgpd", label: "Conformité RGPD assistée, audit sécurité" },
+    ],
+  },
 ];
 
-const cloudFeatures = [
-  { key: "pricing.cloud.f1", label: "Toute la plateforme, sans limite" },
-  { key: "pricing.cloud.f2", label: "Hébergement géré pour vous" },
-  { key: "pricing.cloud.f3", label: "Sauvegardes & mises à jour automatiques" },
-  { key: "pricing.cloud.f4", label: "Support prioritaire" },
+// Comparison matrix. value: true | false | { key, label }
+type Cell = boolean | { key: string; label: string };
+interface Row {
+  key: string;
+  label: string;
+  values: [Cell, Cell, Cell, Cell];
+}
+const t = true;
+const f = false;
+const groups: { key: string; label: string; rows: Row[] }[] = [
+  {
+    key: "pricing.grp.platform",
+    label: "Plateforme & hébergement",
+    rows: [
+      { key: "pricing.r.oss", label: "Open source (Apache 2.0)", values: [t, t, t, t] },
+      { key: "pricing.r.selfhost", label: "Self-hébergement illimité", values: [t, f, f, t] },
+      { key: "pricing.r.cloudFr", label: "Cloud géré en France", values: [f, t, t, t] },
+      { key: "pricing.r.dedicated", label: "Instance dédiée / on-premise", values: [f, f, f, t] },
+      { key: "pricing.r.autoUpdate", label: "Mises à jour automatiques", values: [f, t, t, t] },
+    ],
+  },
+  {
+    key: "pricing.grp.crm",
+    label: "CRM & commercial",
+    rows: [
+      { key: "pricing.r.crmBasic", label: "CRM de base", values: [t, t, t, t] },
+      { key: "pricing.r.pipeline", label: "CRM complet + pipeline", values: [f, t, t, t] },
+      { key: "pricing.r.analytics", label: "Analytics & reporting avancés", values: [f, f, t, t] },
+      { key: "pricing.r.api", label: "API & webhooks", values: [f, f, t, t] },
+    ],
+  },
+  {
+    key: "pricing.grp.collab",
+    label: "Collaboration",
+    rows: [
+      { key: "pricing.r.chat", label: "Messagerie interne", values: [t, t, t, t] },
+      { key: "pricing.r.video", label: "Visioconférence E2EE", values: [t, t, t, t] },
+      { key: "pricing.r.projects", label: "Gestion de projets", values: [t, t, t, t] },
+      { key: "pricing.r.docs", label: "Documentation collaborative", values: [t, t, t, t] },
+    ],
+  },
+  {
+    key: "pricing.grp.hr",
+    label: "RH & support client",
+    rows: [
+      { key: "pricing.r.desk", label: "Support client intégré", values: [f, t, t, t] },
+      { key: "pricing.r.hrBasic", label: "RH de base (congés, frais)", values: [f, t, t, t] },
+      { key: "pricing.r.hrAdvanced", label: "RH avancé (paie, onboarding)", values: [f, f, t, t] },
+    ],
+  },
+  {
+    key: "pricing.grp.security",
+    label: "Sécurité & administration",
+    rows: [
+      { key: "pricing.r.roles", label: "Rôles & permissions granulaires", values: [f, f, t, t] },
+      { key: "pricing.r.sso", label: "SSO (Google, Microsoft)", values: [f, f, t, t] },
+      { key: "pricing.r.audit", label: "Audit logs", values: [f, f, t, t] },
+      { key: "pricing.r.sla", label: "SLA garanti", values: [f, f, f, t] },
+      { key: "pricing.r.secAudit", label: "Audit de sécurité", values: [f, f, f, t] },
+      { key: "pricing.r.rgpd", label: "Conformité RGPD assistée", values: [f, f, f, t] },
+    ],
+  },
+  {
+    key: "pricing.grp.support",
+    label: "Utilisateurs & support",
+    rows: [
+      {
+        key: "pricing.r.users",
+        label: "Utilisateurs",
+        values: [
+          { key: "pricing.v.unlimitedSelf", label: "Illimités (self-hosted)" },
+          { key: "pricing.v.upTo10", label: "Jusqu'à 10" },
+          { key: "pricing.v.unlimited", label: "Illimités" },
+          { key: "pricing.v.unlimited", label: "Illimités" },
+        ],
+      },
+      {
+        key: "pricing.r.support",
+        label: "Support",
+        values: [
+          { key: "pricing.v.github", label: "Communauté GitHub" },
+          { key: "pricing.v.email48", label: "Email 48 h" },
+          { key: "pricing.v.email24", label: "Email prioritaire 24 h" },
+          { key: "pricing.v.dedicated", label: "Téléphone + Slack dédié" },
+        ],
+      },
+      { key: "pricing.r.dedicatedManager", label: "Interlocuteur dédié", values: [f, f, f, t] },
+    ],
+  },
 ];
 
-const dedicatedFeatures = [
-  { key: "pricing.dedicated.f1", label: "Toute la plateforme, sans limite" },
-  { key: "pricing.dedicated.f2", label: "Instance 100 % dédiée" },
-  { key: "pricing.dedicated.f3", label: "Sur notre cloud ou votre infra" },
-  { key: "pricing.dedicated.f4", label: "Support & accompagnement dédiés" },
+const faqs = [
+  { qKey: "pricing.faq.q1", q: "Puis-je migrer depuis Axonaut ou HubSpot ?", aKey: "pricing.faq.a1", a: "Oui. Mestier importe vos contacts, sociétés, devis et factures depuis Axonaut, HubSpot et la plupart des CRM via CSV ou API. Notre équipe vous accompagne sur les plans Business et Enterprise." },
+  { qKey: "pricing.faq.q2", q: "Mes données sont-elles hébergées en France ?", aKey: "pricing.faq.a2", a: "Oui. L'hébergement cloud géré est situé en France (UE), sur une infrastructure conforme RGPD. En self-hosted ou en instance dédiée, vous choisissez où vivent vos données." },
+  { qKey: "pricing.faq.q3", q: "Que se passe-t-il si je dépasse 10 users en Starter ?", aKey: "pricing.faq.a3", a: "Le plan Starter inclut jusqu'à 10 utilisateurs. Au-delà, vous passez simplement au plan Business (utilisateurs illimités, facturés à l'usage). Aucune coupure, la bascule est proposée automatiquement." },
+  { qKey: "pricing.faq.q4", q: "Y a-t-il un engagement de durée ?", aKey: "pricing.faq.a4", a: "Non. Les plans mensuels sont sans engagement, résiliables à tout moment. L'option annuelle (-20 %) couvre douze mois. Et comme le code est open source, vous pouvez toujours repartir avec vos données." },
 ];
 ---
 
 <section id="pricing" class="border-b">
   <div class="mx-auto max-w-6xl px-5 py-20 sm:py-28">
+    <!-- Header -->
     <div class="mx-auto max-w-2xl text-center">
       <p class="text-sm font-semibold uppercase tracking-wide text-primary" data-t="pricing.label">
         Tarifs
       </p>
-      <h2
-        class="mt-3 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl"
-        data-t="pricing.title"
-      >
+      <h2 class="mt-3 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl" data-t="pricing.title">
         Simple et transparent.
       </h2>
       <p class="mt-4 text-lg text-muted-foreground" data-t="pricing.description">
-        Auto-hébergez gratuitement, passez au cloud géré, ou optez pour une
-        instance dédiée. Toute la plateforme, sans options cachées.
+        Une seule plateforme pour remplacer votre stack d'outils. Auto-hébergez
+        gratuitement, ou laissez-nous gérer l'hébergement.
       </p>
     </div>
 
-    <div class="mx-auto mt-14 grid grid-cols-1 gap-6 lg:grid-cols-3">
-      <!-- Self-hosted -->
-      <div class="flex flex-col border border-border bg-card p-8">
-        <h3 class="text-sm font-semibold uppercase tracking-wide text-muted-foreground" data-t="pricing.selfhost.name">
-          Auto-hébergé
-        </h3>
-        <div class="mt-4 flex items-baseline gap-2">
-          <span class="text-5xl font-semibold tracking-tight text-foreground" data-t="pricing.selfhost.price">
-            Gratuit
-          </span>
-        </div>
-        <p class="mt-3 text-sm text-muted-foreground" data-t="pricing.selfhost.desc">
-          Hébergez Mestier sur votre propre infrastructure, pour toujours.
-        </p>
-
-        <ul class="mt-7 flex-1 space-y-3">
-          {
-            selfHostFeatures.map((f) => (
-              <li class="flex items-start gap-2.5 text-sm text-foreground">
-                <Icon icon="mdi:check" className="mt-0.5 size-4 shrink-0 text-primary" client:load />
-                <span data-t={f.key}>{f.label}</span>
-              </li>
-            ))
-          }
-        </ul>
-
-        <a
-          href="https://github.com/ferrislabs/mestier"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="mt-8 inline-flex items-center justify-center gap-2 border border-border px-5 py-3 text-sm font-medium text-foreground transition-colors hover:bg-foreground/[0.04]"
-        >
-          <Icon icon="mdi:github" className="size-4.5" client:load />
-          <span data-t="pricing.selfhost.cta">Auto-héberger</span>
-        </a>
-      </div>
-
-      <!-- Cloud (highlighted) -->
-      <div class="relative flex flex-col border-2 border-primary bg-card p-8">
-        <span
-          class="absolute right-6 top-0 -translate-y-1/2 bg-primary px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-primary-foreground"
-          data-t="pricing.cloud.badge"
-        >
-          Recommandé
+    <!-- Billing toggle -->
+    <div class="mt-10 flex items-center justify-center gap-4" data-billing-toggle>
+      <span class="text-sm font-medium text-foreground" data-period-label="monthly" data-t="pricing.billing.monthly">
+        Mensuel
+      </span>
+      <button
+        type="button"
+        role="switch"
+        aria-checked="false"
+        data-billing-switch
+        class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center border border-border bg-muted transition-colors"
+        aria-label="Basculer mensuel / annuel"
+      >
+        <span data-billing-knob class="pointer-events-none ml-0.5 inline-block size-5 bg-primary transition-transform"></span>
+      </button>
+      <span class="flex items-center gap-2 text-sm font-medium text-muted-foreground" data-period-label="annual">
+        <span data-t="pricing.billing.annual">Annuel</span>
+        <span class="bg-primary/10 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-primary" data-t="pricing.billing.save">
+          -20 %
         </span>
-        <h3 class="text-sm font-semibold uppercase tracking-wide text-primary" data-t="pricing.cloud.name">
-          Cloud
-        </h3>
-        <div class="mt-4 flex items-baseline gap-1.5">
-          <span class="text-5xl font-semibold tracking-tight text-foreground">34,99 €</span>
-          <span class="text-sm text-muted-foreground" data-t="pricing.cloud.unit">/ utilisateur / mois</span>
+      </span>
+    </div>
+
+    <!-- Plan cards -->
+    <div class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+      {
+        plans.map((plan) => (
+          <div
+            class:list={[
+              "relative flex flex-col bg-card p-7",
+              plan.popular ? "border-2 border-primary" : "border border-border",
+            ]}
+          >
+            {plan.popular && (
+              <span
+                class="absolute right-6 top-0 -translate-y-1/2 bg-primary px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-primary-foreground"
+                data-t="pricing.business.badge"
+              >
+                Le plus populaire
+              </span>
+            )}
+
+            <h3
+              class:list={[
+                "text-sm font-semibold uppercase tracking-wide",
+                plan.popular ? "text-primary" : "text-muted-foreground",
+              ]}
+              data-t={plan.nameKey}
+            >
+              {plan.name}
+            </h3>
+
+            <div class="mt-4 flex min-h-[3.5rem] flex-col">
+              {plan.priceText ? (
+                <span class="text-4xl font-semibold tracking-tight text-foreground" data-t={plan.priceTextKey}>
+                  {plan.priceText}
+                </span>
+              ) : (
+                <>
+                  <div class="flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5">
+                    <span
+                      class="whitespace-nowrap text-4xl font-semibold tracking-tight text-foreground"
+                      data-price
+                      data-monthly={plan.monthly}
+                      data-annual={plan.annual}
+                    >
+                      {plan.monthly}
+                    </span>
+                    <span class="text-sm text-muted-foreground" data-t={plan.unitKey}>
+                      {plan.unit}
+                    </span>
+                  </div>
+                  <span class="mt-1 text-xs text-primary opacity-0 transition-opacity" data-annual-note data-t="pricing.billing.billedAnnually">
+                    facturé annuellement
+                  </span>
+                </>
+              )}
+            </div>
+
+            <p class="mt-3 text-sm text-muted-foreground" data-t={plan.descKey}>
+              {plan.desc}
+            </p>
+
+            <ul class="mt-6 flex-1 space-y-2.5">
+              {plan.features.map((feat) => (
+                <li class="flex items-start gap-2.5 text-sm text-foreground">
+                  <Icon icon="mdi:check" className="mt-0.5 size-4 shrink-0 text-primary" client:load />
+                  <span data-t={feat.key}>{feat.label}</span>
+                </li>
+              ))}
+            </ul>
+
+            <a
+              href={plan.href}
+              {...(plan.external ? { target: "_blank", rel: "noopener noreferrer" } : { rel: "noopener noreferrer" })}
+              class:list={[
+                "mt-8 inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-medium transition-colors",
+                plan.popular
+                  ? "bg-primary text-primary-foreground hover:opacity-90"
+                  : "border border-border text-foreground hover:bg-foreground/[0.04]",
+              ]}
+            >
+              <span data-t={plan.ctaKey}>{plan.cta}</span>
+              <Icon icon="mdi:arrow-right" className="size-4" client:load />
+            </a>
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Savings calculator -->
+    <div class="mt-16 border border-border bg-card p-8 sm:p-10" data-calc>
+      <div class="grid gap-8 lg:grid-cols-[1fr_1.2fr] lg:items-center">
+        <div>
+          <p class="text-sm font-semibold uppercase tracking-wide text-primary" data-t="pricing.calc.label">
+            Calculateur d'économies
+          </p>
+          <h3 class="mt-3 text-2xl font-semibold tracking-tight text-foreground" data-t="pricing.calc.title">
+            Combien vous économisez avec Mestier.
+          </h3>
+          <p class="mt-3 text-sm text-muted-foreground" data-t="pricing.calc.desc">
+            Un stack équivalent (Slack + Axonaut + Lucca + Crisp) revient à
+            environ 160 € par utilisateur et par mois.
+          </p>
+
+          <label class="mt-6 block text-sm font-medium text-foreground" for="calc-users" data-t="pricing.calc.usersLabel">
+            Nombre d'utilisateurs
+          </label>
+          <input
+            id="calc-users"
+            type="number"
+            min="1"
+            max="1000"
+            value="10"
+            data-calc-users
+            class="mt-2 w-40 border border-border bg-background px-4 py-2.5 text-lg font-semibold text-foreground outline-none focus:border-primary"
+          />
         </div>
-        <p class="mt-3 text-sm text-muted-foreground" data-t="pricing.cloud.desc">
-          On héberge, sauvegarde et met à jour. Vous utilisez, c'est tout.
-        </p>
 
-        <ul class="mt-7 flex-1 space-y-3">
-          {
-            cloudFeatures.map((f) => (
-              <li class="flex items-start gap-2.5 text-sm text-foreground">
-                <Icon icon="mdi:check" className="mt-0.5 size-4 shrink-0 text-primary" client:load />
-                <span data-t={f.key}>{f.label}</span>
-              </li>
-            ))
-          }
-        </ul>
-
-        <a
-          href={APP_URL}
-          rel="noopener noreferrer"
-          class="mt-8 inline-flex items-center justify-center gap-2 bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
-        >
-          <span data-t="pricing.cloud.cta">Démarrer</span>
-          <Icon icon="mdi:arrow-right" className="size-4.5" client:load />
-        </a>
-      </div>
-
-      <!-- Dedicated -->
-      <div class="flex flex-col border border-border bg-card p-8">
-        <h3 class="text-sm font-semibold uppercase tracking-wide text-muted-foreground" data-t="pricing.dedicated.name">
-          Dédié
-        </h3>
-        <div class="mt-4 flex items-baseline gap-2">
-          <span class="text-5xl font-semibold tracking-tight text-foreground" data-t="pricing.dedicated.price">
-            Sur devis
-          </span>
+        <div class="grid grid-cols-1 gap-px overflow-hidden border border-border bg-border sm:grid-cols-2">
+          <div class="bg-background p-6">
+            <p class="text-xs font-medium uppercase tracking-wider text-muted-foreground" data-t="pricing.calc.stack">
+              Stack classique
+            </p>
+            <p class="mt-2 text-3xl font-semibold text-muted-foreground line-through" data-calc-stack>—</p>
+            <p class="mt-1 text-xs text-muted-foreground" data-t="pricing.calc.perMonth">par mois</p>
+          </div>
+          <div class="bg-background p-6">
+            <p class="text-xs font-medium uppercase tracking-wider text-primary" data-t="pricing.calc.mestier">
+              Mestier Business
+            </p>
+            <p class="mt-2 text-3xl font-semibold text-foreground" data-calc-mestier>—</p>
+            <p class="mt-1 text-xs text-muted-foreground" data-t="pricing.calc.perMonth">par mois</p>
+          </div>
+          <div class="bg-primary p-6 sm:col-span-2">
+            <p class="text-xs font-medium uppercase tracking-wider text-primary-foreground/80">
+              <span data-t="pricing.calc.savings">Vous économisez</span>
+            </p>
+            <p class="mt-1 text-2xl font-semibold text-primary-foreground">
+              <span data-calc-savings>—</span>
+              <span class="text-base font-normal text-primary-foreground/80" data-t="pricing.calc.perYear">par an</span>
+            </p>
+          </div>
         </div>
-        <p class="mt-3 text-sm text-muted-foreground" data-t="pricing.dedicated.desc">
-          Une instance Mestier rien qu'à vous, sur notre cloud ou votre infra.
-        </p>
-
-        <ul class="mt-7 flex-1 space-y-3">
-          {
-            dedicatedFeatures.map((f) => (
-              <li class="flex items-start gap-2.5 text-sm text-foreground">
-                <Icon icon="mdi:check" className="mt-0.5 size-4 shrink-0 text-primary" client:load />
-                <span data-t={f.key}>{f.label}</span>
-              </li>
-            ))
-          }
-        </ul>
-
-        <a
-          href={CONTACT_URL}
-          class="mt-8 inline-flex items-center justify-center gap-2 border border-border px-5 py-3 text-sm font-medium text-foreground transition-colors hover:bg-foreground/[0.04]"
-        >
-          <Icon icon="mdi:email-outline" className="size-4.5" client:load />
-          <span data-t="pricing.dedicated.cta">Nous contacter</span>
-        </a>
       </div>
     </div>
 
-    <p class="mt-8 text-center text-sm text-muted-foreground" data-t="pricing.note">
-      Toute la plateforme incluse, tous les modules. Sans engagement.
+    <!-- Comparison table -->
+    <div class="mt-20">
+      <h3 class="text-center text-2xl font-semibold tracking-tight text-foreground sm:text-3xl" data-t="pricing.compare.title">
+        Comparer les plans en détail.
+      </h3>
+
+      <div class="mt-10 overflow-x-auto">
+        <table class="w-full min-w-[760px] border-collapse text-left text-sm">
+          <thead class="sticky top-0 z-20">
+            <tr class="border-b-2 border-border bg-background">
+              <th class="sticky left-0 z-30 bg-background py-5 pr-4 align-bottom font-medium text-muted-foreground" data-t="pricing.compare.feature">
+                Fonctionnalité
+              </th>
+              {
+                plans.map((plan) => (
+                  <th
+                    class:list={[
+                      "px-4 py-5 align-bottom",
+                      plan.popular ? "bg-primary/5" : "",
+                    ]}
+                  >
+                    {/* Top accent bar */}
+                    <span
+                      class:list={[
+                        "mb-3 block h-0.5 w-full",
+                        plan.popular ? "bg-primary" : "bg-border",
+                      ]}
+                      aria-hidden="true"
+                    />
+                    <span
+                      class:list={[
+                        "block text-base font-semibold",
+                        plan.popular ? "text-primary" : "text-foreground",
+                      ]}
+                      data-t={plan.nameKey}
+                    >
+                      {plan.name}
+                    </span>
+                    {plan.popular && (
+                      <span class="mt-0.5 block text-[10px] font-semibold uppercase tracking-wider text-primary" data-t="pricing.business.badge">
+                        Le plus populaire
+                      </span>
+                    )}
+                    <span class="mt-1.5 block text-xs font-normal text-muted-foreground">
+                      {plan.priceText ? (
+                        <span data-t={plan.priceTextKey}>{plan.priceText}</span>
+                      ) : (
+                        <>
+                          <span class="whitespace-nowrap font-semibold text-foreground" data-price data-monthly={plan.monthly} data-annual={plan.annual}>{plan.monthly}</span>
+                          {" "}
+                          <span data-t={plan.unitKey}>{plan.unit}</span>
+                        </>
+                      )}
+                    </span>
+                  </th>
+                ))
+              }
+            </tr>
+          </thead>
+          <tbody>
+            {
+              groups.map((group) => (
+                <>
+                  <tr class="bg-muted/40">
+                    <td
+                      colspan="5"
+                      class="sticky left-0 bg-muted/40 px-0 py-2.5 pl-0 text-xs font-semibold uppercase tracking-wider text-foreground"
+                    >
+                      <span class="pr-4" data-t={group.key}>{group.label}</span>
+                    </td>
+                  </tr>
+                  {group.rows.map((row) => (
+                    <tr class="border-b border-border/60">
+                      <td class="sticky left-0 z-10 bg-background py-3 pr-4 text-foreground" data-t={row.key}>
+                        {row.label}
+                      </td>
+                      {row.values.map((val) => (
+                        <td class="px-4 py-3">
+                          {typeof val === "boolean" ? (
+                            val ? (
+                              /* Inline SVG — no React hydration needed inside <tbody> */
+                              <svg class="size-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-label="Inclus">
+                                <polyline points="20 6 9 17 4 12" />
+                              </svg>
+                            ) : (
+                              <svg class="size-4 text-muted-foreground/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-label="Non inclus">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                              </svg>
+                            )
+                          ) : (
+                            <span class="text-foreground" data-t={val.key}>{val.label}</span>
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="mx-auto mt-20 max-w-3xl">
+      <h3 class="text-center text-2xl font-semibold tracking-tight text-foreground sm:text-3xl" data-t="pricing.faq.title">
+        Questions fréquentes.
+      </h3>
+      <div class="mt-10 divide-y divide-border border-y border-border">
+        {
+          faqs.map((faq) => (
+            <details class="group">
+              <summary class="flex cursor-pointer items-center justify-between gap-4 py-5 text-base font-medium text-foreground marker:content-['']">
+                <span data-t={faq.qKey}>{faq.q}</span>
+                <Icon
+                  icon="mdi:plus"
+                  className="size-5 shrink-0 text-muted-foreground transition-transform group-open:rotate-45"
+                  client:load
+                />
+              </summary>
+              <p class="pb-5 text-sm leading-relaxed text-muted-foreground" data-t={faq.aKey}>
+                {faq.a}
+              </p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+
+    <p class="mt-12 text-center text-sm text-muted-foreground" data-t="pricing.note">
+      Tous les plans incluent l'ensemble des modules. Sans engagement, sans options cachées.
     </p>
   </div>
 </section>
+
+<script
+  is:inline
+  define:vars={{ stackCost: STACK_COST, businessMonthly: 19, businessAnnual: 15.2 }}
+>
+  function initPricing() {
+    const root = document.getElementById("pricing");
+    if (!root) return;
+
+    // ---- Billing toggle ----
+    const sw = root.querySelector("[data-billing-switch]");
+    const knob = root.querySelector("[data-billing-knob]");
+    const monthlyLabel = root.querySelector('[data-period-label="monthly"]');
+    const annualLabel = root.querySelector('[data-period-label="annual"]');
+    let annual = false;
+
+    function applyPeriod() {
+      root.querySelectorAll("[data-price]").forEach(function (el) {
+        const v = annual ? el.getAttribute("data-annual") : el.getAttribute("data-monthly");
+        if (v) el.textContent = v;
+      });
+      root.querySelectorAll("[data-annual-note]").forEach(function (el) {
+        el.style.opacity = annual ? "1" : "0";
+      });
+      if (knob) knob.style.transform = annual ? "translateX(20px)" : "translateX(0)";
+      if (sw) {
+        sw.setAttribute("aria-checked", annual ? "true" : "false");
+        sw.style.backgroundColor = annual ? "var(--color-primary)" : "";
+        if (knob) knob.style.backgroundColor = annual ? "var(--color-primary-foreground)" : "";
+      }
+      if (monthlyLabel) monthlyLabel.classList.toggle("text-muted-foreground", annual);
+      if (monthlyLabel) monthlyLabel.classList.toggle("text-foreground", !annual);
+      if (annualLabel) annualLabel.classList.toggle("text-muted-foreground", !annual);
+      if (annualLabel) annualLabel.classList.toggle("text-foreground", annual);
+      updateCalc();
+    }
+
+    if (sw && !sw.dataset.bound) {
+      sw.dataset.bound = "1";
+      sw.addEventListener("click", function () {
+        annual = !annual;
+        applyPeriod();
+      });
+    }
+
+    // ---- Savings calculator ----
+    const input = root.querySelector("[data-calc-users]");
+    const stackOut = root.querySelector("[data-calc-stack]");
+    const mestierOut = root.querySelector("[data-calc-mestier]");
+    const savingsOut = root.querySelector("[data-calc-savings]");
+
+    function detectLocale() {
+      const m = document.cookie.match(/(?:^|; )locale=([^;]*)/);
+      const c = m ? m[1] : null;
+      if (c === "en" || c === "fr") return c;
+      const b = (navigator.language || "").split("-")[0];
+      return b === "en" ? "en" : "fr";
+    }
+
+    function fmt(n) {
+      const locale = detectLocale() === "en" ? "en-US" : "fr-FR";
+      return new Intl.NumberFormat(locale, {
+        style: "currency",
+        currency: "EUR",
+        maximumFractionDigits: 0,
+      }).format(n);
+    }
+
+    function updateCalc() {
+      if (!input) return;
+      let users = parseInt(input.value, 10);
+      if (isNaN(users) || users < 1) users = 1;
+      if (users > 1000) users = 1000;
+      const per = annual ? businessAnnual : businessMonthly;
+      const mestier = users * per;
+      const stack = users * stackCost;
+      const savingYear = Math.max(0, (stack - mestier) * 12);
+      if (stackOut) stackOut.textContent = fmt(stack);
+      if (mestierOut) mestierOut.textContent = fmt(mestier);
+      if (savingsOut) savingsOut.textContent = fmt(savingYear);
+    }
+
+    if (input && !input.dataset.bound) {
+      input.dataset.bound = "1";
+      input.addEventListener("input", updateCalc);
+    }
+
+    applyPeriod();
+    updateCalc();
+  }
+
+  initPricing();
+  document.addEventListener("astro:page-load", initPricing);
+  document.addEventListener("astro:after-swap", initPricing);
+  // Recompute currency formatting when the language switches.
+  window.addEventListener("locale:change", initPricing);
+</script>
